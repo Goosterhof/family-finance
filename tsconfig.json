@@ -15,15 +15,15 @@
         "alwaysStrict": true,
         "esModuleInterop": true,
         "checkJs": true,
-        "baseUrl": ".",
+        "baseUrl": "./resources/js",
         "paths": {
-            "components": ["./resources/js/components"],
-            "pages": ["./resources/js/pages"],
-            "router": ["./resources/js/router"],
-            "modules": ["./resources/js/modules"],
-            "helpers/*": ["./resources/js/helpers/*"],
-            "services/*": ["./resources/js/services/*"],
-            "types/*": ["./resources/js/types/*"]
+            "components/*": ["./components/*"],
+            "pages/*": ["./pages/*"],
+            "router/*": ["./router/*"],
+            "modules/*": ["./modules/*"],
+            "helpers/*": ["./helpers/*"],
+            "services/*": ["./services/*"],
+            "types/*": ["./types/*"]
         }
     },
     "include": ["resources/js/**/*", "tests/js/services/helpers", "tests/js/component/**/*"]

@@ -1,20 +1,14 @@
 <template>
-    <div id="wrapper" :class="bodyClass">
-        <!-- <TheNavbar v-if="isLoggedIn" /> -->
-        <TheNavbar />
-        <div id="content-wrapper">
-            <div id="content" class="container ml-0">
-                <Suspense>
-                    <template #default>
-                        <router-view />
-                    </template>
-                    <template #fallback>Loading...</template>
-                </Suspense>
-            </div>
-        </div>
-    </div>
+    <TheNavbar v-if="isLoggedIn" />
+    <Suspense>
+        <template #default>
+            <router-view />
+        </template>
+        <template #fallback>Loading...</template>
+    </Suspense>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import TheNavbar from 'components/Navbar.vue';
+import {isLoggedIn} from 'services/auth';
 </script>

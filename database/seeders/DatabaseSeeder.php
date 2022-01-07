@@ -14,13 +14,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call([ AdminSeeder::class, ]);
-
         if (App::environment('local', 'example', 'testing')) {
             $this->call([
-                CompanySeeder::class,
                 UserSeeder::class,
-                ProfileSeeder::class,
             ]);
         }
     }

@@ -2,25 +2,44 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
+
     /**
-     * Company that belongs to the user
+     * The attributes that are mass assignable.
      *
-     * @return BelongsTo
+     * @var array
      */
-    public function company(): BelongsTo
+    protected $fillable = [
+        'first_name', 'last_name', 'email',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password'
+    ];
+
+    /**
+     * When setting the password it will be hashed
+     *
+     * @param string $password
+     *
+     * @return void
+     */
+    public function setPasswordAttribute(string $password)
     {
-        return $this->belongsTo(Company::class);
+        $this->attributes['password'] = bcrypt($password);
     }
 
     /**
@@ -42,31 +61,4 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'first_name', 'last_name', 'email', 'company_id', 'email_id',
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
 }

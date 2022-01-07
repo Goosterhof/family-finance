@@ -1,0 +1,30 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "module": "esnext",
+        "target": "esnext",
+        "moduleResolution": "node",
+        "lib": ["es2017", "dom"],
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "declaration": true,
+        "strict": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "esModuleInterop": true,
+        "checkJs": true,
+        "baseUrl": ".",
+        "paths": {
+            "components": ["./resources/js/components"],
+            "pages": ["./resources/js/pages"],
+            "router": ["./resources/js/router"],
+            "modules": ["./resources/js/modules"],
+            "helpers/*": ["./resources/js/helpers/*"],
+            "services/*": ["./resources/js/services/*"],
+            "types/*": ["./resources/js/types/*"]
+        }
+    },
+    "include": ["resources/js/**/*", "tests/js/services/helpers", "tests/js/component/**/*"]
+}

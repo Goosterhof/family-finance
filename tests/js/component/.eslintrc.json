@@ -1,0 +1,21 @@
+{
+    "env": {"jest/globals": true},
+    "plugins": ["jest"],
+    "rules": {
+        // JS rules override from root eslintrc
+        "max-lines-per-function": "off",
+        // Jest rules
+        "jest/no-disabled-tests": "warn",
+        "jest/no-focused-tests": "error",
+        "jest/no-identical-title": "error",
+        "jest/prefer-to-have-length": "warn",
+        "jest/valid-expect": "error",
+        "jest/consistent-test-it": ["error", {"fn": "it", "withinDescribe": "it"}],
+        "jest/expect-expect": ["warn", {"assertFunctionNames": ["expect"]}],
+        "jest/no-conditional-expect": "error",
+        "jest/no-if": "warn",
+        "jest/no-jest-import": "error",
+        "jest/prefer-strict-equal": "error",
+        "jest/valid-describe-callback": "error"
+    }
+}

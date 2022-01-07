@@ -1,0 +1,13 @@
+{
+    "recommendations": [
+        // php extensions
+        "neilbrayfield.php-docblocker",
+        "valeryanm.vscode-phpsab",
+        // vue/js extensions
+        "johnsoncodehk.volar",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        // git extension
+        "eamodio.gitlens"
+    ]
+}

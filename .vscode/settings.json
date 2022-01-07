@@ -1,0 +1,41 @@
+{
+    // Basic editor settings
+    "editor.tabSize": 4,
+    "editor.formatOnSave": true,
+    // ESLint settings
+    "eslint.run": "onType",
+    "eslint.workingDirectories": ["./resources/js"],
+    "eslint.nodePath": "./node_modules",
+    "eslint.alwaysShowStatus": true,
+    "eslint.validate": ["vue"],
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    // PHP formatter settings
+    "php.validate.enable": true,
+    "php.suggest.basic": false,
+    "files.exclude": {
+        "**/public/": true
+    },
+    "[php]": {
+        "editor.defaultFormatter": "valeryanm.vscode-phpsab"
+    },
+    "phpsab.fixerEnable": true,
+    "phpsab.snifferEnable": true,
+    "phpsab.snifferMode": "onType",
+    "phpsab.executablePathCS": "./vendor/bin/phpcs.bat",
+    "phpsab.executablePathCBF": "./vendor/bin/phpcbf.bat",
+    // Vue settings
+    "volar.codeLens.pugTools": false,
+    "volar.codeLens.scriptSetupTools": false,
+    "[vue]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    // Javascript settings
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+}

@@ -19,8 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('last_name');
             $table->string('email');
             $table->string('password');
-            $table->foreignId('company_id')->constrained();
-            $table->boolean('admin');
+            $table->foreignId('family_id')->constrained();
+            $table->boolean('admin')->default(false);
             $table->string('invite_token')->nullable();
             $table->string('password_reset_token')->nullable();
             $table->timestamps();

@@ -1,5 +1,5 @@
 import {createApp} from '@vue/runtime-dom';
-import {setupRouter} from 'resources/js/router';
+import {setupRouter} from 'router';
 import '../../sass/app.scss';
 
 // Component File

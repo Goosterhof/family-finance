@@ -16,9 +16,5 @@
 </template>
 
 <script setup>
-import TheNavbar from 'admin/components/Navbar.vue';
-import {getCurrentRouteName} from 'services/router';
-import {computed} from 'vue';
-
-const bodyClass = computed(() => getCurrentRouteName()?.replace(/\./g, '-').toLowerCase());
+import TheNavbar from 'components/Navbar.vue';
 </script>

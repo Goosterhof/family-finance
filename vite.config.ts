@@ -13,6 +13,7 @@ const resolve = {
         pages: path.join(srcPath, 'pages'),
         router: path.join(srcPath, 'router'),
         modules: path.join(srcPath, 'modules'),
+        layouts: path.join(srcPath, 'layouts'),
 
         helpers: path.join(srcPath, 'helpers'),
         services: path.join(srcPath, 'services'),

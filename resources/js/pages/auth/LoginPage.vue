@@ -1,6 +1,6 @@
 <template>
-    <main class="page-center">
-        <article class="sign-up">
+    <div class="page-center">
+        <div class="sign-up">
             <h1 class="sign-up__title">Family Finance</h1>
             <p class="sign-up__subtitle">Ga verder met je financiele avontuur</p>
             <form class="sign-up-form form" @submit.prevent="login(credentials)">
@@ -38,8 +38,8 @@
                     Registreren
                 </router-link>
             </form>
-        </article>
-    </main>
+        </div>
+    </div>
 </template>
 
 <script setup lang="ts">

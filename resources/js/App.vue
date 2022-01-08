@@ -12,3 +12,15 @@
 import TheNavbar from 'components/Navbar.vue';
 import {isLoggedIn} from 'services/auth';
 </script>
+
+<style>
+body {
+    /* padding: 0;
+    margin: 0; */
+    min-height: 100vh;
+}
+
+#app {
+    min-height: 100vh;
+}
+</style>

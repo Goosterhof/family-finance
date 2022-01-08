@@ -23,6 +23,7 @@
             "modules/*": ["./modules/*"],
             "helpers/*": ["./helpers/*"],
             "services/*": ["./services/*"],
+            "layouts/*": ["./layouts/*"],
             "types/*": ["./types/*"]
         }
     },

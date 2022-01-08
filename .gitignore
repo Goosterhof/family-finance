@@ -3,6 +3,8 @@
 /public/storage
 /public/js
 /public/css
+/public/fonts
+/public/images
 /public/mix-manifest.json
 /public/*.js
 /public/*.js.map

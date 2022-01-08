@@ -1,5 +1,7 @@
 <template>
-    <button type="submit" class="btn btn-primary">{{ btnText }}</button>
+    <div class="mb-3 d-grid">
+        <button type="submit" class="btn btn-primary">{{ btnText }}</button>
+    </div>
 </template>
 
 <script setup lang="ts">

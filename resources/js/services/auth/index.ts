@@ -14,7 +14,7 @@ import {
 import {NavigationGuard} from 'vue-router';
 
 const LOGIN_ROUTE_NAME = 'Login';
-const FORGOT_PASSWORD_ROUTE_NAME = 'ForgotPassword';
+export const FORGOT_PASSWORD_ROUTE_NAME = 'ForgotPassword';
 const RESET_PASSWORD_ROUTE_NAME = 'ResetPassword';
 const SET_PASSWORD_ROUTE_NAME = 'SetPassword';
 

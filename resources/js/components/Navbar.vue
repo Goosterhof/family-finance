@@ -3,7 +3,7 @@
         <router-link :to="{name: 'Home'}" class="navbar-brand">
             <h1 class="mt-0 mt-md-3">Ffind</h1>
         </router-link>
-        <div id="nav-collapse" class="navbar-collapse collapse" style="display: none">
+        <div id="nav-collapse" class="navbar-collapse collapse">
             <ul class="nav w-100 flex-column">
                 <template v-for="menuItem in menu" :key="menuItem.title">
                     <li class="navbar-text">{{ menuItem.title }}</li>
@@ -12,8 +12,8 @@
                     </li>
                 </template>
                 <li class="nav-item logout">
-                    <!-- @click="logout" -->
-                    <a href="#" target="_self" class="nav-link">Uitloggen</a>
+                    <!-- -->
+                    <a href="#" target="_self" class="nav-link" @click="logout">Uitloggen</a>
                 </li>
             </ul>
         </div>
@@ -21,6 +21,8 @@
 </template>
 
 <script setup lang="ts">
+import {logout} from 'services/auth';
+
 // import {logout} from '@script-development/vue-services';
 // import {cvModule, emailModule, userModule, newUserModule, profileModule, companyModule} from '../modules';
 

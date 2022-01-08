@@ -33,6 +33,16 @@ const testNodeTransformer: NodeTransform = node => {
     }
 };
 
+const plugins = [
+    copy({
+        targets: [
+            {src: 'resources/img', dest: 'public/images'},
+            {src: 'resources/fonts', dest: 'public/fonts'},
+        ],
+        hook: 'writeBundle',
+    }),
+];
+
 export default ({command}) => {
     const production = command !== 'serve';
 
@@ -42,13 +52,7 @@ export default ({command}) => {
         vueOptions.template = {compilerOptions: {nodeTransforms: [testNodeTransformer]}};
     }
 
-    const plugins = [
-        copy({
-            targets: [{src: 'resources/img', dest: 'public/images'}],
-            hook: 'writeBundle',
-        }),
-        vue(vueOptions),
-    ];
+    plugins.push(vue(vueOptions));
 
     // Generates stats.html file with the bundle stats handy for reducing the main bundle size
     if (production) plugins.push(visualizer({}));

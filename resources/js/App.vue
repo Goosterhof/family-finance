@@ -6,9 +6,11 @@
                 <SideBar />
                 <Suspense>
                     <template #default>
-                        <router-view />
+                        <router-view class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4" />
                     </template>
-                    <template #fallback>Loading...</template>
+                    <template #fallback>
+                        <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">Loading...</div>
+                    </template>
                 </Suspense>
             </div>
         </div>

@@ -8,6 +8,7 @@ import {
     Item,
     LoggedInUser,
     LoginCredentials,
+    RegisterCredentials,
     ResetPasswordData,
     ResponseErrorMiddleware,
 } from 'types/types';
@@ -16,13 +17,14 @@ import {NavigationGuard} from 'vue-router';
 const LOGIN_ROUTE_NAME = 'Login';
 export const FORGOT_PASSWORD_ROUTE_NAME = 'ForgotPassword';
 const RESET_PASSWORD_ROUTE_NAME = 'ResetPassword';
-const SET_PASSWORD_ROUTE_NAME = 'SetPassword';
+export const REGISTER_ROUTE_NAME = 'Register';
 
 const APP_NAME = 'Family Finance';
 const IS_LOGGED_IN_KEY = APP_NAME + ' is magical';
 const LOGGED_IN_USER_KEY = APP_NAME + ' is supreme';
 
 const apiLoginRoute = '/login';
+const apiRegisterRoute = '/register';
 const apiLogoutRoute = '/logout';
 const apiLoggedInCheckRoute = '/me';
 const apiSendResetPasswordEmailRoute = '/send-email-reset-password';
@@ -33,7 +35,7 @@ const goToDefaultLoggedInPage = () => goToRoute('Home');
 export const goToLoginPage = () => goToRoute(LOGIN_ROUTE_NAME);
 export const goToResetPasswordPage = () => goToRoute(RESET_PASSWORD_ROUTE_NAME);
 export const goToForgotPasswordPage = () => goToRoute(FORGOT_PASSWORD_ROUTE_NAME);
-export const goToSetPasswordPage = () => goToRoute(SET_PASSWORD_ROUTE_NAME);
+export const goToRegisterPage = () => goToRoute(REGISTER_ROUTE_NAME);
 
 export const isLoggedIn: IsLoggedIn = ref(getItemFromStorage(IS_LOGGED_IN_KEY, true, false));
 export const loggedInUser: LoggedInUser = ref(getItemFromStorage(LOGGED_IN_USER_KEY, true, {}));
@@ -92,6 +94,14 @@ export const login = async (credentials: LoginCredentials) => {
     return response;
 };
 
+export const register = async (credentials: RegisterCredentials) => {
+    const response = await postRequest(apiRegisterRoute, credentials);
+
+    setLoggedInAndUser(response.data.user);
+    goToDefaultLoggedInPage();
+    return response;
+};
+
 export const logout = async () => {
     const response = await postRequest(apiLogoutRoute, {});
 
@@ -126,7 +136,7 @@ export const setAuthRoutes = (
     loginPage: Component,
     resetPasswordPage: Component,
     forgotPasswordPage: Component,
-    setPasswordPage: Component,
+    regiserPage: Component,
 ) => {
     addRoute({path: '/inloggen', name: LOGIN_ROUTE_NAME, component: loginPage, meta: createRouteMeta('login')});
 
@@ -145,9 +155,9 @@ export const setAuthRoutes = (
     });
 
     addRoute({
-        path: '/wachtwoord-setten',
-        name: SET_PASSWORD_ROUTE_NAME,
-        component: setPasswordPage,
+        path: '/registreren',
+        name: REGISTER_ROUTE_NAME,
+        component: regiserPage,
         meta: createRouteMeta('Wachtwoord setten'),
     });
 };

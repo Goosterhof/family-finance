@@ -3,6 +3,7 @@ import {setAuthRoutes} from 'services/auth';
 
 import HomePage from 'pages/HomePage.vue';
 import LoginPage from 'pages/auth/LoginPage.vue';
+import RegisterPage from 'pages/auth/RegisterPage.vue';
 
 export const setupRouter = () => {
     addRoute({
@@ -12,7 +13,7 @@ export const setupRouter = () => {
         meta: {auth: true},
     });
 
-    setAuthRoutes(LoginPage, LoginPage, LoginPage, LoginPage);
+    setAuthRoutes(LoginPage, LoginPage, LoginPage, RegisterPage);
 
     return router;
 };

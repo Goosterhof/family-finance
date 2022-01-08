@@ -64,14 +64,21 @@ export type AuthComponents = {
     setPassword?: Component;
 };
 
-export type LoginCredentials = {
+export interface LoginCredentials {
     /** the email to login with */
     email: string;
     /** the password to login with */
     password: string;
     /** if you want a persistent login */
     rememberMe: boolean;
-};
+}
+
+export interface RegisterCredentials extends LoginCredentials {
+    first_name: string;
+    last_name: string;
+    family: string;
+    repeat_password: string;
+}
 
 export type ResetPasswordData = {
     password: string;

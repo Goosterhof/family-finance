@@ -27,9 +27,16 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
+import {ref, watch} from 'vue';
 import {logout, loggedInUser} from 'services/auth';
+import {getCurrentRoute} from 'services/router';
+
 const profileDropdown = ref(false);
+
+watch(
+    () => getCurrentRoute(),
+    () => (profileDropdown.value = false),
+);
 </script>
 
 <style scoped>

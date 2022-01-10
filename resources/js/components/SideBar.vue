@@ -1,5 +1,4 @@
 <template>
-    <!-- TODO :: make mobile friendly -->
     <button
         class="navbar-toggler d-md-none collapsed mb-3 navbar-light"
         type="button"
@@ -180,8 +179,19 @@
 
 <script setup lang="ts">
 import {isMobile} from 'helpers/mobile';
-import {ref} from 'vue';
+import {getCurrentRoute} from 'services/router';
+import {ref, watch} from 'vue';
 const mobileDropdown = ref(false);
+
+watch(
+    () => isMobile.value,
+    () => (mobileDropdown.value = false),
+);
+
+watch(
+    () => getCurrentRoute(),
+    () => (mobileDropdown.value = false),
+);
 </script>
 
 <style scoped>

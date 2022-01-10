@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\BetterEmail;
-
 class LoginUser extends BaseFormRequest
 {
     /**
@@ -16,6 +14,7 @@ class LoginUser extends BaseFormRequest
         return [
             'email' => ['required', 'string'],
             'password' => 'required|min:5|max:255',
+            'rememberMe' => 'required'
         ];
     }
 

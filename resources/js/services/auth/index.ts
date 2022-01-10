@@ -82,7 +82,7 @@ const logoutOfApp = () => {
 export const login = async (credentials: LoginCredentials) => {
     const response = await postRequest(apiLoginRoute, credentials);
 
-    setLoggedInAndUser(response.data.user);
+    setLoggedInAndUser(response.data);
     goToDefaultLoggedInPage();
     return response;
 };
@@ -90,7 +90,7 @@ export const login = async (credentials: LoginCredentials) => {
 export const register = async (credentials: RegisterCredentials) => {
     const response = await postRequest(apiRegisterRoute, credentials);
 
-    setLoggedInAndUser(response.data.user);
+    setLoggedInAndUser(response.data);
     goToDefaultLoggedInPage();
     return response;
 };
@@ -105,7 +105,7 @@ export const logout = async () => {
 export const checkIfLoggedIn = async () => {
     const response = await getRequestWithoutCache(apiLoggedInCheckRoute);
 
-    setLoggedInAndUser(response.data.user);
+    setLoggedInAndUser(response.data);
     return response;
 };
 

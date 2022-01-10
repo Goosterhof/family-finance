@@ -5,12 +5,31 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginUser;
 use App\Http\Resources\LoggedInUserResource;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\JWTAuth;
 
 class AuthController extends Controller
 {
     private const JWT_TTL_REMEMBER = 60 * 24 * 7;
+
+    /**
+     * The authentication provider
+     *
+     * @var JWTAuth
+     */
+    private $auth;
+    
+    /**
+     * Construct a new controller
+     *
+     * @param JWTAuth $auth
+     */
+    public function __construct(JWTAuth $auth)
+    {
+        $this->auth = $auth;
+    }
+
 
     /**
      * Get a JWT via given credentials.
@@ -21,44 +40,31 @@ class AuthController extends Controller
      */
     public function login(LoginUser $request)
     {
-        $validated = $request->validated();
+        $credentials = $request->validated();
 
-        $token = $this->guard()->attempt($validated);
+        $jwtTtl = $credentials['rememberMe'] ? self::JWT_TTL_REMEMBER : config('jwt.ttl');
+        $this->auth->factory()->setTTL($jwtTtl);
+
+        unset($credentials['rememberMe']);
+
+        $token = $this->auth->attempt($credentials);
 
         if (!$token) {
-            return response()->json([
-                'errors' => [
-                    'password' => [
-                        'Het ingevoerde wachtwoord is onjuist'
+            return new JsonResponse(
+                [
+                    'message' => 'E-mail of wachtwoord is onjuist',
+                    'errors' => [
+                        'password' => [
+                            'probeer het opnieuw, of klik hieronder op "wachtwoord vergeten"'
                         ]
-                    ],
-                    "message" => "Formulier bevat fouten"
-                ], 422);
+                    ]
+                ],
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            );
         }
 
-        $jwtTtl = request('rememberMe') ? self::JWT_TTL_REMEMBER : config('jwt.ttl');
-
-        $user = $this->guard()->user();
-
-        $token = auth()->setTTL(self::JWT_TTL_REMEMBER)->login($user);
-
-        $responseData = [
-            'status' => 'success',
-            'user' => new LoggedInUserResource($user),
-        ];
-
-        return response()
-            ->json($responseData, 200)->cookie('Authorization', "Bearer {$token}", $jwtTtl, $secure = true);
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard
-     */
-    private function guard()
-    {
-        return Auth::guard('api');
+        return (new JsonResponse(new LoggedInUserResource($this->auth->user())))
+            ->cookie('Authorization', "Bearer {$token}", $jwtTtl, $secure = true);
     }
 
     /**
@@ -68,7 +74,7 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(['user' => new LoggedInUserResource($this->guard()->user())]);
+        return new JsonResponse(new LoggedInUserResource($this->auth->user()));
     }
 
     /**
@@ -78,7 +84,7 @@ class AuthController extends Controller
      */
     public function logout(): int
     {
-        Auth::logout();
+        $this->auth->invalidate();
         return Response::HTTP_NO_CONTENT;
     }
 }

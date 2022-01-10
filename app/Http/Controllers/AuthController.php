@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginUser;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\LoggedInUserResource;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
@@ -44,7 +44,7 @@ class AuthController extends Controller
 
         $responseData = [
             'status' => 'success',
-            'user' => new UserResource($user),
+            'user' => new LoggedInUserResource($user),
         ];
 
         return response()
@@ -68,7 +68,7 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(['user' => new UserResource($this->guard()->user())]);
+        return response()->json(['user' => new LoggedInUserResource($this->guard()->user())]);
     }
 
     /**

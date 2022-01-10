@@ -2,7 +2,7 @@
     <CenterForm @submit.prevent="register(credentials)">
         <BaseTextInput v-model="credentials.first_name" label="Voornaam" placeholder="Je voornaam" />
         <BaseTextInput v-model="credentials.last_name" label="Achternaam" placeholder="Je achternaam" />
-        <BaseTextInput v-model="credentials.last_name" label="Familie" placeholder="Tot welke familie je behoort" />
+        <BaseTextInput v-model="credentials.family" label="Familie" placeholder="Tot welke familie je behoort" />
         <BaseEmailInput v-model="credentials.email" />
         <BasePasswordInput v-model="credentials.password" autocomplete="new-password" />
         <BasePasswordInput

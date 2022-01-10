@@ -17,7 +17,7 @@ class LoggedInUserResource extends UserResource
         $userData = parent::toArray($request);
 
         $userData['family'] = $this->family->name;
-        $userData['family_users'] = UserResource::collection($this->family->users);
+        $userData['family_members'] = UserResource::collection($this->family->users);
 
         return $userData;
     }

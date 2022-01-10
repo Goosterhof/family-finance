@@ -4,14 +4,17 @@
         <div class="container-fluid">
             <div class="row">
                 <SideBar />
-                <Suspense>
-                    <template #default>
-                        <router-view class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4" />
-                    </template>
-                    <template #fallback>
-                        <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">Loading...</div>
-                    </template>
-                </Suspense>
+                <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                    <TheBreadcrumb />
+                    <Suspense>
+                        <template #default>
+                            <router-view />
+                        </template>
+                        <template #fallback>
+                            <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">Loading...</div>
+                        </template>
+                    </Suspense>
+                </div>
             </div>
         </div>
     </template>
@@ -19,9 +22,10 @@
 </template>
 
 <script setup lang="ts">
-import TopBar from 'components/TopBar.vue';
 import {isLoggedIn} from 'services/auth';
+import TopBar from 'components/TopBar.vue';
 import SideBar from 'components/SideBar.vue';
+import TheBreadcrumb from 'components/TheBreadcrumb.vue';
 </script>
 
 <style>

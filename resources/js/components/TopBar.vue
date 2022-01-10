@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar navbar-light bg-light p-3">
         <div class="d-flex col-12 col-md-3 col-lg-2 mb-2 mb-lg-0 flex-wrap flex-md-nowrap justify-content-between">
-            <a class="navbar-brand" href="#">Family Finance</a>
+            <router-link class="navbar-brand" :to="{name: 'Home'}">Family Finance</router-link>
         </div>
         <div class="col-12 col-md-4 col-lg-2">
             <input class="form-control form-control-dark" type="text" placeholder="Zoeken" aria-label="Search" />
@@ -17,6 +17,7 @@
                     Hallo, {{ loggedInUser.first_name }}
                 </button>
                 <ul class="dropdown-menu" :class="{show: profileDropdown}">
+                    <li><router-link class="dropdown-item" :to="{name: 'Profile'}">Profiel</router-link></li>
                     <!-- <li><a class="dropdown-item" href="#">Settings</a></li>
                     <li><a class="dropdown-item" href="#">Messages</a></li> -->
                     <li><span role="button" class="dropdown-item" @click="logout">Uitloggen</span></li>
@@ -34,7 +35,7 @@ import {getCurrentRoute} from 'services/router';
 const profileDropdown = ref(false);
 
 watch(
-    () => getCurrentRoute(),
+    () => getCurrentRoute().value,
     () => (profileDropdown.value = false),
 );
 </script>

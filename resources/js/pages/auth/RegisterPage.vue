@@ -1,67 +1,31 @@
 <template>
-    <main class="page-center">
-        <article class="sign-up">
-            <h1 class="sign-up__title">Family Finance</h1>
-            <p class="sign-up__subtitle">Begin hier aan je financiele avontuur</p>
-            <form class="sign-up-form form" @submit.prevent="register(credentials)">
-                <label class="form-label-wrapper">
-                    <p class="form-label">Voornaam</p>
-                    <input class="form-input" type="text" placeholder="Je voornaam" required />
-                </label>
-                <label class="form-label-wrapper">
-                    <p class="form-label">Achternaam</p>
-                    <input class="form-input" type="text" placeholder="Je achternaam" required />
-                </label>
-                <label class="form-label-wrapper">
-                    <p class="form-label">Familie</p>
-                    <input class="form-input" type="text" placeholder="Tot welke familie je behoort" required />
-                </label>
-                <label class="form-label-wrapper">
-                    <p class="form-label">Email</p>
-                    <input
-                        v-model="credentials.email"
-                        class="form-input"
-                        type="email"
-                        placeholder="Je email"
-                        required
-                    />
-                </label>
-                <label class="form-label-wrapper">
-                    <p class="form-label">Wachtwoord</p>
-                    <input
-                        v-model="credentials.password"
-                        class="form-input"
-                        type="password"
-                        autocomplete="new-password"
-                        placeholder="Je wachtwoord"
-                        required
-                    />
-                </label>
+    <CenterForm @submit.prevent="register(credentials)">
+        <BaseTextInput v-model="credentials.first_name" label="Voornaam" placeholder="Je voornaam" />
+        <BaseTextInput v-model="credentials.last_name" label="Achternaam" placeholder="Je achternaam" />
+        <BaseTextInput v-model="credentials.family" label="Familie" placeholder="Tot welke familie je behoort" />
+        <BaseEmailInput v-model="credentials.email" />
+        <BasePasswordInput v-model="credentials.password" autocomplete="new-password" />
+        <BasePasswordInput
+            v-model="credentials.repeat_password"
+            autocomplete="new-password"
+            placeholder="Herhaal je wachtwoord"
+            label="Wachtwoord herhalen"
+        />
+        <BaseCheckboxInput v-model="credentials.rememberMe" label="Herinner mij de volgende keer" />
 
-                <label class="form-label-wrapper">
-                    <p class="form-label">Wachtwoord herhalen</p>
-                    <input
-                        v-model="credentials.repeat_password"
-                        class="form-input"
-                        type="password"
-                        autocomplete="new-password"
-                        placeholder="Je wachtwoord"
-                        required
-                    />
-                </label>
-                <label class="form-checkbox-wrapper">
-                    <input v-model="credentials.rememberMe" class="form-checkbox" type="checkbox" required />
-                    <span class="form-checkbox-label">Herinner mij de volgende keer</span>
-                </label>
-                <button class="form-btn primary-default-btn transparent-btn">Registreer</button>
-            </form>
-        </article>
-    </main>
+        <TheSubmitButton btn-text="Registreer" />
+    </CenterForm>
 </template>
 
 <script setup lang="ts">
 import {register} from 'services/auth';
 import {reactive} from 'vue';
+import CenterForm from 'layouts/CenterForm.vue';
+import BaseTextInput from 'components/base/BaseTextInput.vue';
+import BaseEmailInput from 'components/base/BaseEmailInput.vue';
+import BasePasswordInput from 'components/base/BasePasswordInput.vue';
+import BaseCheckboxInput from 'components/base/BaseCheckboxInput.vue';
+import TheSubmitButton from 'components/TheSubmitButton.vue';
 
 const credentials = reactive({
     first_name: '',

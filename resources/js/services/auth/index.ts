@@ -1,18 +1,11 @@
-import {Component, ref} from 'vue';
+import {Component, Ref, ref} from 'vue';
 
 import {getRequestWithoutCache, postRequest, registerResponseErrorMiddleware} from 'services/http';
 import {addRoute, goToRoute, registerBeforeMiddleware} from 'services/router';
 import {clearStorage, getItemFromStorage, setItemInStorage} from 'services/storage';
-import {
-    IsLoggedIn,
-    Item,
-    LoggedInUser,
-    LoginCredentials,
-    RegisterCredentials,
-    ResetPasswordData,
-    ResponseErrorMiddleware,
-} from 'types/types';
+import {ResponseErrorMiddleware} from 'types/types';
 import {NavigationGuard} from 'vue-router';
+import {LoggedInUser, LoginCredentials, RegisterCredentials, ResetPasswordData} from 'types/services/auth';
 
 const LOGIN_ROUTE_NAME = 'Login';
 export const FORGOT_PASSWORD_ROUTE_NAME = 'ForgotPassword';
@@ -37,8 +30,8 @@ export const goToResetPasswordPage = () => goToRoute(RESET_PASSWORD_ROUTE_NAME);
 export const goToForgotPasswordPage = () => goToRoute(FORGOT_PASSWORD_ROUTE_NAME);
 export const goToRegisterPage = () => goToRoute(REGISTER_ROUTE_NAME);
 
-export const isLoggedIn: IsLoggedIn = ref(getItemFromStorage(IS_LOGGED_IN_KEY, true, false));
-export const loggedInUser: LoggedInUser = ref(getItemFromStorage(LOGGED_IN_USER_KEY, true, {}));
+export const isLoggedIn: Ref<boolean> = ref(getItemFromStorage(IS_LOGGED_IN_KEY, true, false));
+export const loggedInUser: Ref<LoggedInUser> = ref(getItemFromStorage(LOGGED_IN_USER_KEY, true, {}));
 
 const responseErrorMiddleware: ResponseErrorMiddleware = ({response}) => {
     if (!response) return;
@@ -71,7 +64,7 @@ const beforeMiddleware: NavigationGuard = ({meta}) => {
 
 registerBeforeMiddleware(beforeMiddleware);
 
-const setLoggedInAndUser = (user: Item) => {
+const setLoggedInAndUser = (user: LoggedInUser) => {
     // set the logged in user
     loggedInUser.value = user;
     setItemInStorage(LOGGED_IN_USER_KEY, user);
@@ -89,7 +82,7 @@ const logoutOfApp = () => {
 export const login = async (credentials: LoginCredentials) => {
     const response = await postRequest(apiLoginRoute, credentials);
 
-    setLoggedInAndUser(response.data.user);
+    setLoggedInAndUser(response.data);
     goToDefaultLoggedInPage();
     return response;
 };
@@ -97,7 +90,7 @@ export const login = async (credentials: LoginCredentials) => {
 export const register = async (credentials: RegisterCredentials) => {
     const response = await postRequest(apiRegisterRoute, credentials);
 
-    setLoggedInAndUser(response.data.user);
+    setLoggedInAndUser(response.data);
     goToDefaultLoggedInPage();
     return response;
 };
@@ -112,7 +105,7 @@ export const logout = async () => {
 export const checkIfLoggedIn = async () => {
     const response = await getRequestWithoutCache(apiLoggedInCheckRoute);
 
-    setLoggedInAndUser(response.data.user);
+    setLoggedInAndUser(response.data);
     return response;
 };
 

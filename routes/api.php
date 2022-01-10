@@ -18,12 +18,11 @@
  */
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
 
 $router->post('login', [AuthController::class, 'login']);
 $router->post('send-mail-reset-password', [PasswordResetsController::class, 'store']);
 $router->post('reset-password', [PasswordResetsController::class, 'update']);
-$router->post('users', [UserController::class, 'store']);
+$router->post('register', [AuthController::class, 'register']);
 
 $router->group(['middleware' => ['auth:api']], function () use ($router) {
     $router->post('logout', [AuthController::class, 'logout']);

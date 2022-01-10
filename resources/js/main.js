@@ -1,6 +1,9 @@
 import {createApp} from '@vue/runtime-dom';
+import {initMobileDetection} from 'helpers/mobile';
 import {setupRouter} from 'router';
-import '../css/style.css';
+import '../scss/app.scss';
+
+initMobileDetection();
 
 // Component File
 import App from './App.vue';

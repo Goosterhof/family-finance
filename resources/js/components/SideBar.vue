@@ -189,7 +189,7 @@ watch(
 );
 
 watch(
-    () => getCurrentRoute(),
+    () => getCurrentRoute().value,
     () => (mobileDropdown.value = false),
 );
 </script>

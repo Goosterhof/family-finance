@@ -35,5 +35,5 @@ export interface LoggedInUser extends Item {
     last_name: string;
     email: string;
     family: string;
-    family_users: User[];
+    family_members: User[];
 }

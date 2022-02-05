@@ -18,6 +18,9 @@ class LoggedInUserResource extends UserResource
 
         $userData['family'] = $this->family->name;
         $userData['family_members'] = UserResource::collection($this->family->users);
+        $userData['categories'] = CategoryResource::collection(
+            $this->family->categories()->whereNull('category_id')->get()
+        );
 
         return $userData;
     }

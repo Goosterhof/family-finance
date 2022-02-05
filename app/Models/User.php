@@ -32,7 +32,7 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     /**
-     * Returns the Initiative
+     * Returns the Family
      *
      * @return BelongsTo
      */

@@ -14,7 +14,7 @@ export interface Item {
 type ErrorBag = {[property: string]: string[]};
 export type ErrorBagRef = Ref<ErrorBag>;
 
-export type State = Ref<{[id: number]: Readonly<Item>}>;
+export type State<T extends Item> = Ref<{[id: number]: Readonly<T>}>;
 
 export type Translation = {singular: string; plural: string};
 export type Translations = {[moduleName: string]: Translation};

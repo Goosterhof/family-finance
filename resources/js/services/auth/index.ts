@@ -30,8 +30,10 @@ export const goToResetPasswordPage = () => goToRoute(RESET_PASSWORD_ROUTE_NAME);
 export const goToForgotPasswordPage = () => goToRoute(FORGOT_PASSWORD_ROUTE_NAME);
 export const goToRegisterPage = () => goToRoute(REGISTER_ROUTE_NAME);
 
-export const isLoggedIn: Ref<boolean> = ref(getItemFromStorage(IS_LOGGED_IN_KEY, true, false));
-export const loggedInUser: Ref<LoggedInUser> = ref(getItemFromStorage(LOGGED_IN_USER_KEY, true, {}));
+export const isLoggedIn: Ref<boolean> = ref(!!getItemFromStorage<boolean>(IS_LOGGED_IN_KEY, true, false));
+export const loggedInUser: Ref<LoggedInUser | undefined> = ref(
+    getItemFromStorage<LoggedInUser>(LOGGED_IN_USER_KEY, true),
+);
 
 const responseErrorMiddleware: ResponseErrorMiddleware = ({response}) => {
     if (!response) return;

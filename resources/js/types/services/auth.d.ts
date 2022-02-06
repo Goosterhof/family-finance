@@ -1,6 +1,7 @@
 import {Component} from 'vue';
 import {Item} from 'types/types';
 import {User} from 'types/models/user';
+import {Category} from 'types/models/category';
 
 export type AuthComponents = {
     login: Component;
@@ -36,4 +37,5 @@ export interface LoggedInUser extends Item {
     email: string;
     family: string;
     family_members: User[];
+    categories: Category[];
 }

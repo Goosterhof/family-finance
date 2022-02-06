@@ -57,18 +57,7 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request): NoContentResponse
     {
-        $validated = $request->validated();
-
-        /**
-         * The authentication user
-         *
-         * @var User
-         */
-        $user = $this->auth->user();
-        $validated['family_id'] = $user->family_id;
-
-        Category::create($validated);
-        
+        Category::create($request->validated());
         return new NoContentResponse();
     }
 

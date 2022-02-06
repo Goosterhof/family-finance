@@ -24,21 +24,20 @@
 </template>
 
 <script setup lang="ts">
-import {Category} from 'types/models/category';
-import {PropType, ref} from 'vue';
+import {categoryRepository, categoryStoreModule} from 'modules/categories';
+import {ref} from 'vue';
 import CategoryList from './CategoryList.vue';
 
-defineProps({
-    categories: {
-        type: Array as PropType<Category[]>,
-        required: true,
-    },
-});
+categoryRepository.getAll();
+
+const categories = categoryStoreModule.all;
 
 const newCategoryName = ref('');
 const addCategory = ref(false);
 
 const submitNewCategory = async () => {
+    await categoryRepository.create({name: newCategoryName.value});
+    await categoryRepository.getAll();
     addCategory.value = false;
     newCategoryName.value = '';
 };

@@ -3,7 +3,7 @@
     <p>Dit is je profiel pagina waar je je gegevens kan aanpassen</p>
     <div v-if="loggedInUser" class="row">
         <div class="col-12 col-xl-6">
-            <CategoryCard :categories="loggedInUser.categories" />
+            <CategoryCard />
         </div>
         <div class="col-12 col-xl-4 mb-4 mb-lg-0">
             <div class="card">

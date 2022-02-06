@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rules\Exists;
+
 class StoreCategoryRequest extends BaseFormRequest
 {
     /**
@@ -12,7 +14,8 @@ class StoreCategoryRequest extends BaseFormRequest
     public function rules()
     {
         return [
-            //
+            'name' => ['required', 'min:3'],
+            'category_id' => ['nullable', new Exists('categories')]
         ];
     }
 }

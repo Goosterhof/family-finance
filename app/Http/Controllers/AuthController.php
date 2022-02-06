@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginUser;
 use App\Http\Requests\RegisterUser;
 use App\Http\Resources\LoggedInUserResource;
+use App\Http\Responses\NoContentResponse;
 use App\Models\Family;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -85,12 +86,12 @@ class AuthController extends Controller
     /**
      * Log the user out (Invalidate the token).
      *
-     * @return integer
+     * @return NoContentResponse
      */
-    public function logout(): int
+    public function logout(): NoContentResponse
     {
         $this->auth->invalidate();
-        return Response::HTTP_NO_CONTENT;
+        return new NoContentResponse();
     }
 
     /**

@@ -22,6 +22,7 @@
 </template>
 
 <script lang="ts">
+import {categoryRepository} from 'modules/categories';
 import {Category} from 'types/models/category';
 import {defineComponent, PropType, ref} from 'vue';
 
@@ -36,6 +37,8 @@ const CategoryList = defineComponent({
         const newCategoryName = ref('');
         const addCategory = ref(0);
         const submitNewCategory = async () => {
+            await categoryRepository.create({name: newCategoryName.value, category_id: addCategory.value});
+            await categoryRepository.getAll();
             addCategory.value = 0;
             newCategoryName.value = '';
         };

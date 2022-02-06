@@ -5,67 +5,79 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use App\Http\Resources\CategoryResource;
+use App\Http\Responses\NoContentResponse;
+use App\Models\User;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Tymon\JWTAuth\JWTAuth;
 
 class CategoryController extends Controller
 {
     /**
+     * The authentication provider
+     *
+     * @var JWTAuth
+     */
+    private $auth;
+    
+    /**
+     * Construct a new controller
+     *
+     * @param JWTAuth $auth
+     */
+    public function __construct(JWTAuth $auth)
+    {
+        $this->auth = $auth;
+    }
+    
+    /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        /**
+         * The authentication user
+         *
+         * @var User
+         */
+        $user = $this->auth->user();
+        return CategoryResource::collection(
+            $user->family->categories()->whereNull('category_id')->get()
+        );
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreCategoryRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreCategoryRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
+     * @param StoreCategoryRequest $request
      *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
+     * @return NoContentResponse
      */
-    public function show(Category $category)
+    public function store(StoreCategoryRequest $request): NoContentResponse
     {
-        //
-    }
+        $validated = $request->validated();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Category $category)
-    {
-        //
+        /**
+         * The authentication user
+         *
+         * @var User
+         */
+        $user = $this->auth->user();
+        $validated['family_id'] = $user->family_id;
+
+        Category::create($validated);
+        
+        return new NoContentResponse();
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateCategoryRequest  $request
-     * @param  \App\Models\Category  $category
+     * @param UpdateCategoryRequest $request
+     * @param \App\Models\Category  $category
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateCategoryRequest $request, Category $category)
@@ -76,7 +88,8 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Category  $category
+     * @param \App\Models\Category $category
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Category $category)

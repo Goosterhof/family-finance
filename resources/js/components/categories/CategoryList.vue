@@ -2,10 +2,10 @@
     <li v-for="category in categories" :key="category.id" class="list-group-item pe-0">
         <div class="d-flex justify-content-between align-items-center">
             {{ category.name }}
-            <button class="btn btn-sm" @click="addCategory = category.id">Subcategorie toevoegen</button>
+            <button class="btn btn-sm" @click="addToCategoryId = category.id"><PlusIcon /></button>
         </div>
         <ul class="list-group list-group-flush">
-            <AddCategory v-if="addCategory === category.id" v-model="addCategory" />
+            <AddCategory v-if="addToCategoryId === category.id" />
             <CategoryList v-if="category.children.length" :categories="category.children" />
         </ul>
     </li>
@@ -13,8 +13,10 @@
 
 <script lang="ts">
 import {Category} from 'types/models/category';
-import {defineComponent, PropType, ref} from 'vue';
+import {defineComponent, PropType} from 'vue';
 import AddCategory from './AddCategory.vue';
+import PlusIcon from 'icons/PlusIcon.vue';
+import {addToCategoryId} from 'modules/categories';
 
 const CategoryList = defineComponent({
     props: {
@@ -24,12 +26,16 @@ const CategoryList = defineComponent({
         },
     },
     setup() {
-        const addCategory = ref(0);
-        return {addCategory};
+        return {addToCategoryId};
     },
 });
-
-CategoryList.components = {CategoryList, AddCategory};
+CategoryList.components = {CategoryList, AddCategory, PlusIcon};
 
 export default CategoryList;
 </script>
+
+<style scoped>
+button:focus {
+    box-shadow: none;
+}
+</style>

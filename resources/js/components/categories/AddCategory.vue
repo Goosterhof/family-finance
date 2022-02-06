@@ -7,27 +7,18 @@
 </template>
 
 <script setup lang="ts">
-import {categoryRepository} from 'modules/categories';
+import {addToCategoryId, categoryRepository} from 'modules/categories';
 import {NewCategory} from 'types/models/category';
 import {ref} from 'vue';
-
-const props = defineProps({
-    modelValue: {
-        type: Number,
-        required: true,
-    },
-});
-
-const emit = defineEmits(['update:modelValue']);
 
 const newCategoryName = ref('');
 
 const submitNewCategory = async () => {
     const data: NewCategory = {name: newCategoryName.value};
-    if (props.modelValue > 0) data.category_id = props.modelValue;
+    if (addToCategoryId.value > 0) data.category_id = addToCategoryId.value;
     await categoryRepository.create(data);
     await categoryRepository.getAll();
     newCategoryName.value = '';
-    emit('update:modelValue', -1);
+    addToCategoryId.value = -1;
 };
 </script>

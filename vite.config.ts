@@ -10,6 +10,7 @@ const srcPath = path.resolve('./resources/js');
 const resolve = {
     alias: {
         components: path.join(srcPath, 'components'),
+        icons: path.join(srcPath, 'icons'),
         pages: path.join(srcPath, 'pages'),
         router: path.join(srcPath, 'router'),
         modules: path.join(srcPath, 'modules'),

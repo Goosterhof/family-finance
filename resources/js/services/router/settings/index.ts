@@ -3,8 +3,12 @@
  * @typedef {import('vue-router').RouteRecordRaw} RouteRecordRaw
  * @typedef {import('types/services/router').RouteSettings} RouteSettings
  */
-import {defineComponent, h} from 'vue';
-import {MinimalRouterView} from '../MinimalRouterView';
+import {Repository} from 'types/services/repository';
+import {RouteSettings} from 'types/services/router';
+import {Item, Translation} from 'types/types';
+import {Component, defineComponent, h} from 'vue';
+import {RouteRecordRaw} from 'vue-router';
+import MinimalRouterView from '../MinimalRouterView.vue';
 
 export const CREATE_PAGE_NAME = '.create';
 export const EDIT_PAGE_NAME = '.edit';
@@ -37,15 +41,12 @@ const pathConversion = {
     [SHOW]: ':id',
 };
 
-/**
- * @param {string} moduleName
- * @param {CREATE | EDIT | OVERVIEW | SHOW} part
- * @param {Component} component
- * @param {string} translation
- *
- * @returns {RouteRecordRaw}
- */
-const partialFactory = (moduleName, part, component, translation) => {
+const partialFactory = (
+    moduleName: string,
+    part: typeof CREATE | typeof EDIT | typeof OVERVIEW | typeof SHOW,
+    component: Component,
+    translation: string,
+): RouteRecordRaw => {
     return {
         name: moduleName + nameConversion[part],
         path: pathConversion[part],
@@ -63,26 +64,17 @@ const partialFactory = (moduleName, part, component, translation) => {
  * Creates standard route settings.
  * Creates settings for the optional routes when the components are given.
  * Does not add the optional routes otherwise
- *
- * @param {string} moduleName
- * @param {import('types/types').Translation} translation
- * @param {Component} baseComponent
- * @param {Component} [overviewComponent]
- * @param {Component} [createComponent]
- * @param {Component} [editComponent]
- * @param {Component} [showComponent]
  */
 export const createRouteSettings = (
-    moduleName,
-    translation,
-    baseComponent,
-    overviewComponent,
-    createComponent,
-    editComponent,
-    showComponent,
+    moduleName: string,
+    translation: Translation,
+    baseComponent: Component,
+    overviewComponent?: Component,
+    createComponent?: Component,
+    editComponent?: Component,
+    showComponent?: Component,
 ) => {
-    /** @type {RouteSettings} */
-    const routeSettings = {
+    const routeSettings: RouteSettings = {
         base: {
             path: `/${translation.plural}`,
             component: baseComponent,
@@ -106,12 +98,9 @@ export const createRouteSettings = (
     return routeSettings;
 };
 
-/**
- * @param {import('types/services/repository').Repository} repository
- */
-export const createBaseComponent = repository =>
+export const createBaseComponent = <T extends Item, NewT>(repository?: Repository<T, NewT>) =>
     defineComponent({
         name: 'BasePage',
-        mounted: async () => await repository.getAll(),
+        mounted: async () => await repository?.getAll(),
         render: () => h(MinimalRouterView, {depth: 1}),
     });

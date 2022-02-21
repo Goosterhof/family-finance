@@ -1,16 +1,11 @@
-/**
- * @typedef {import('vue').Ref} Ref
- */
 import {ref} from 'vue';
 import {registerRequestMiddleware, registerResponseMiddleware, registerResponseErrorMiddleware} from 'services/http';
 
-let spinnerTimeout = 500;
-let minTimeSpinner = 1000;
+const spinnerTimeout = 500;
+const minTimeSpinner = 1000;
 
-/** @type {NodeJS.Timeout} */
-let loadingTimeoutId;
-/** @type {number|undefined} */
-let loadingTimeStart;
+let loadingTimeoutId: NodeJS.Timeout;
+let loadingTimeStart: number | undefined;
 
 registerRequestMiddleware(() => setLoading(true));
 registerResponseMiddleware(() => setLoading(false));
@@ -18,15 +13,11 @@ registerResponseErrorMiddleware(() => setLoading(false));
 
 /**
  * get the loading state
- *
- * @returns {Ref<boolean>}
  */
 export const loading = ref(false);
 
 /**
  * get the spinner loading state
- *
- * @returns {Ref<boolean>}
  */
 export const spinnerLoading = ref(false);
 
@@ -34,10 +25,8 @@ export const spinnerLoading = ref(false);
  * Set the loading state.
  * Does not set the state immediatly after recieving false.
  * It only sets it before 500ms or after 1500ms.
- *
- * @param {Boolean} newLoading the loading state
  */
-export const setLoading = newLoading => {
+export const setLoading = (newLoading: boolean) => {
     loading.value = newLoading;
     if (loadingTimeoutId) clearTimeout(loadingTimeoutId);
 

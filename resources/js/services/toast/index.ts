@@ -1,36 +1,19 @@
-/**
- * @typedef {import("vue").App} App
- *
- * @typedef {import("types/types").ToastMessages} ToastMessages
- * @typedef {import("types/types").ToastMessage} ToastMessage
- * @typedef {import("types/types").ToastVariant} ToastVariant
- * @typedef {import("types/types").Modals} Modals
- * @typedef {import("types/types").Modal} Modal
- * @typedef {import("types/types").ResponseMiddleware} ResponseMiddleware
- * @typedef {import("types/types").ResponseErrorMiddleware} ResponseErrorMiddleware
- */
-
-import {createApp, defineComponent, h, ref} from 'vue';
+import {createApp, defineComponent, h, Ref, ref} from 'vue';
 import {registerResponseErrorMiddleware, registerResponseMiddleware} from 'services/http';
-import {ToastComponent} from './Toast';
-import {ModalComponent} from './Modal';
+import ToastComponent from './Toast.vue';
+import {ResponseErrorMiddleware, ResponseMiddleware, ToastMessage, ToastVariant} from 'types/types';
 
-/** @type {ToastMessages} */
-const toastMessages = ref([]);
-/** @type {Modals} */
-const modals = ref([]);
+const toastMessages: Ref<ToastMessage[]> = ref([]);
 
 /**
  * The default duration for a toast message.
- * Can be overwritten.
  */
-export let defaultToastMessageDuration = 1500;
+const defaultToastMessageDuration = 1500;
 
 /**
  * Hide the toast message after a timeout and delete it from toastMessages
- * @param {ToastMessage} message
  */
-const hideToastMessage = message => {
+const hideToastMessage = (message: ToastMessage) => {
     if (message.timeoutId) clearTimeout(message.timeoutId);
 
     // TODO :: because this is called from render the ref becomes itself
@@ -47,20 +30,16 @@ const hideToastMessage = message => {
 
 /**
  * Hide the toast message after the given duration
- *
- * @param {ToastMessage} message the message to remove after the delay
  */
-const hideToastMessageAfterDelay = message => {
+const hideToastMessageAfterDelay = (message: ToastMessage) => {
     if (message.timeoutId) clearTimeout(message.timeoutId);
     message.timeoutId = setTimeout(() => hideToastMessage(message), message.duration);
 };
 
 const eventApp = defineComponent({
     render() {
-        if (modals.value.length) document.body.classList.add('modal-open');
-        else document.body.classList.remove('modal-open');
-
         const toasts = toastMessages.value.map(message => {
+            // @ts-ignore TODO :: ToastComponent throws error with vue-tsc command
             return h(ToastComponent, {
                 message: message.message,
                 show: message.show,
@@ -75,12 +54,6 @@ const eventApp = defineComponent({
         return [
             // TODO :: make position of the toast container an option
             h('div', {class: 'toast-container position-absolute bottom-0 start-0', style: 'z-index:9999;'}, toasts),
-            modals.value.map((modal, index) => {
-                return h(ModalComponent, {
-                    ...modal,
-                    onClose: () => modals.value.splice(index, 1),
-                });
-            }),
         ];
     },
 });
@@ -91,33 +64,25 @@ createApp(eventApp).mount(eventContainer);
 
 /**
  * Create a toast message
- *
- * @param {string} message the message to show
- * @param {ToastVariant} [variant] the variant of the toast, default = success
- * @param {number} [duration] the duration the toast stays visisble, default = defaultToastMessageDuration
  */
-export const createToastMessage = (message, variant = 'success', duration = defaultToastMessageDuration) => {
+export const createToastMessage = (
+    message: string,
+    variant: ToastVariant = 'success',
+    duration = defaultToastMessageDuration,
+) => {
     const toastMessage = {message, variant, duration, show: ref(true)};
     hideToastMessageAfterDelay(toastMessage);
     toastMessages.value.push(toastMessage);
 };
 
-/** @type {ResponseMiddleware} */
-export const responseMiddleware = ({data}) => {
+const responseMiddleware: ResponseMiddleware = ({data}) => {
     if (data && data.message) createToastMessage(data.message);
 };
 
 registerResponseMiddleware(responseMiddleware);
 
-/** @type {ResponseErrorMiddleware} */
-export const responseErrorMiddleware = ({response}) => {
+const responseErrorMiddleware: ResponseErrorMiddleware = ({response}) => {
     if (response && response.data.message) createToastMessage(response.data.message, 'danger');
 };
 
 registerResponseErrorMiddleware(responseErrorMiddleware);
-
-/**
- *
- * @param {Modal} modal
- */
-export const createModal = modal => modals.value.push(modal);

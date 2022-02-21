@@ -1,29 +1,20 @@
-/**
- * @typedef {import('axios').AxiosRequestConfig} AxiosRequestConfig
- *
- * @typedef {import('../../types/types').Cache} Cache
- * @typedef {import('../../types/types').RequestMiddleware} RequestMiddleware
- * @typedef {import('../../types/types').ResponseMiddleware} ResponseMiddleware
- * @typedef {import('../../types/types').ResponseErrorMiddleware} ResponseErrorMiddleware
- */
-import axios from 'axios';
+import axios, {AxiosRequestConfig} from 'axios';
+import {Cache, RequestMiddleware, ResponseErrorMiddleware, ResponseMiddleware} from 'types/types';
 
-/** @type {Object<string,string>} */
-const HEADERS_TO_TYPE = {
+const HEADERS_TO_TYPE: Record<string, string> = {
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'application/xlsx',
 };
 
 const CACHE_KEY = 'HTTP_CACHE';
 const baseURL = '/api';
 
-/** @type {number} */
-let cacheDuration = 0;
+/** Cache duration in seconds */
+let cacheDuration = 10;
 
 // Not using storageService here, cause it always needs to be stored in the localStorage
 const preCache = localStorage.getItem(CACHE_KEY);
 // TODO :: how to test these branches?
-/** @type {Cache} */
-const cache = preCache ? JSON.parse(preCache) : {};
+const cache: Cache = preCache ? JSON.parse(preCache) : {};
 
 const http = axios.create({
     baseURL,
@@ -34,12 +25,9 @@ const http = axios.create({
     },
 });
 
-/** @type {RequestMiddleware[]} */
-const requestMiddleware = [];
-/** @type {ResponseMiddleware[]} */
-const responseMiddleware = [];
-/** @type {ResponseErrorMiddleware[]} */
-const responseErrorMiddleware = [];
+const requestMiddleware: RequestMiddleware[] = [];
+const responseMiddleware: ResponseMiddleware[] = [];
+const responseErrorMiddleware: ResponseErrorMiddleware[] = [];
 
 http.interceptors.request.use(request => {
     for (const middleware of requestMiddleware) middleware(request);
@@ -58,16 +46,13 @@ http.interceptors.response.use(
     },
 );
 
-/** @param {number} value */
-export const setCacheDuration = value => (cacheDuration = value);
+export const setCacheDuration = (value: number) => (cacheDuration = value);
 export const getCacheDuration = () => cacheDuration;
 
 /**
  * send a get request to the given endpoint
- * @param {string} endpoint the endpoint for the get
- * @param {AxiosRequestConfig} [options] the optional request options
  */
-export const getRequest = async (endpoint, options) => {
+export const getRequest = async (endpoint: string, options?: AxiosRequestConfig) => {
     // If there is no cache duration, then there is no need to use the cache
     if (!cacheDuration) return getRequestWithoutCache(endpoint, options);
 
@@ -78,32 +63,33 @@ export const getRequest = async (endpoint, options) => {
         if (currentTimeStamp - cache[endpoint] < cacheDuration) return;
     }
 
-    return http.get(endpoint, options).then(response => {
-        cache[endpoint] = currentTimeStamp;
-        localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
-        return response;
-    });
+    const response = await http.get(endpoint, options);
+    cache[endpoint] = currentTimeStamp;
+    localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+
+    return response;
 };
 
 /**
  * send a get request to the given endpoint without using cache
- * @param {string} endpoint the endpoint for the get
- * @param {AxiosRequestConfig} [options] the optional request options
  */
-export const getRequestWithoutCache = async (endpoint, options) => http.get(endpoint, options);
+export const getRequestWithoutCache = async (endpoint: string, options?: AxiosRequestConfig) =>
+    http.get(endpoint, options);
 
 /**
  * send a post request to the given endpoint with the given data
- * @param {string} endpoint the endpoint for the post
- * @param {any} data the data to be send to the server
  */
-export const postRequest = async (endpoint, data) => http.post(endpoint, data);
+export const postRequest = async (endpoint: string, data: unknown) => http.post(endpoint, data);
+
+/**
+ * send a put request to the given endpoint with the given data
+ */
+export const putRequest = async (endpoint: string, data: unknown) => http.put(endpoint, data);
 
 /**
  * send a delete request to the given endpoint
- * @param {string} endpoint the endpoint for the get
  */
-export const deleteRequest = async endpoint => http.delete(endpoint);
+export const deleteRequest = async (endpoint: string) => http.delete(endpoint);
 
 /**
  * download a file from the backend
@@ -112,14 +98,13 @@ export const deleteRequest = async endpoint => http.delete(endpoint);
  * if it's not given, then it will try to resolve the filename from the response headers content-disposition
  *
  * type should be resolved automagically, if not, then you can pass the type
- *
- * @param {string} endpoint the endpoint for the download
- * @param {string} [documentName] the name of the document to be downloaded
- * @param {string} [type] the downloaded document type
  */
-export const download = async (endpoint, documentName, type) =>
+export const download = async (endpoint: string, documentName?: string, type?: string) =>
     http.get(endpoint, {responseType: 'blob'}).then(response => {
-        if (!type) type = HEADERS_TO_TYPE[response.headers['content-type']];
+        const contentType = response.headers['content-type'];
+        if (!type && contentType in HEADERS_TO_TYPE) {
+            type = HEADERS_TO_TYPE[contentType];
+        }
         const blob = new Blob([response.data], {type});
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
@@ -131,25 +116,21 @@ export const download = async (endpoint, documentName, type) =>
             return response;
         }
 
-        /** @type {string} */
         const contentHeaders = response.headers['content-disposition'];
 
         const fileNameString = 'filename="';
         const firstIndex = contentHeaders.indexOf(fileNameString) + fileNameString.length;
         // TODO :: do something when the firstindex is not found
 
-        const lastIndex = contentHeaders.substr(firstIndex).indexOf('"');
-        link.download = contentHeaders.substr(firstIndex, lastIndex);
+        const lastIndex = contentHeaders.slice(firstIndex).indexOf('"');
+        link.download = contentHeaders.slice(firstIndex, lastIndex);
 
         link.click();
         return response;
     });
 
-/** @param {RequestMiddleware} middlewareFunc */
-export const registerRequestMiddleware = middlewareFunc => requestMiddleware.push(middlewareFunc);
-
-/** @param {ResponseMiddleware} middlewareFunc */
-export const registerResponseMiddleware = middlewareFunc => responseMiddleware.push(middlewareFunc);
-
-/** @param {ResponseErrorMiddleware} middlewareFunc */
-export const registerResponseErrorMiddleware = middlewareFunc => responseErrorMiddleware.push(middlewareFunc);
+export const registerRequestMiddleware = (middlewareFunc: RequestMiddleware) => requestMiddleware.push(middlewareFunc);
+export const registerResponseMiddleware = (middlewareFunc: ResponseMiddleware) =>
+    responseMiddleware.push(middlewareFunc);
+export const registerResponseErrorMiddleware = (middlewareFunc: ResponseErrorMiddleware) =>
+    responseErrorMiddleware.push(middlewareFunc);

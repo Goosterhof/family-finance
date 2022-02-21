@@ -1,5 +1,5 @@
 import {AxiosError, AxiosRequestConfig, AxiosResponse} from 'axios';
-import {Ref} from 'vue';
+import {DefineComponent, Ref} from 'vue';
 
 export type RequestMiddleware = (request: AxiosRequestConfig) => void;
 export type ResponseMiddleware = (response: AxiosResponse) => void;
@@ -8,6 +8,11 @@ export type ResponseErrorMiddleware = (error: AxiosError) => void;
 export interface Item {
     id: number;
 }
+
+export type ModalData = {
+    modal: DefineComponent;
+    passingData?: {[propNameOrAction: string]: unknown};
+}[];
 
 type ErrorBag = {[property: string]: string[]};
 export type ErrorBagRef = Ref<ErrorBag>;

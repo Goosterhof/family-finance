@@ -8,7 +8,8 @@
         "test:component:watch": "jest tests/js/component --watchAll",
         "test:component:cc": "jest tests/js/component --collect-coverage",
         "lint": "eslint \"resources/js/**/*.{js,ts,vue}\" \"tests/js/**/*.{js,ts,vue}\" --fix --cache",
-        "lint:pipeline": "eslint \"resources/js/**/*.{js,ts,vue}\" \"tests/js/**/*.{js,ts,vue}\" --format=json -o eslint.out"
+        "lint:pipeline": "eslint \"resources/js/**/*.{js,ts,vue}\" \"tests/js/**/*.{js,ts,vue}\" --format=json -o eslint.out",
+        "vue-tsc": "vue-tsc --noEmit -p tsconfig.volar.json"
     },
     "devDependencies": {
         "@babel/types": "^7.17.0",

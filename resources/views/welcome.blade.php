@@ -35,7 +35,7 @@
         <script type="module" src="/js/{{ $manifest['resources/js/main.js']['file'] }}"></script>
     @else
         <script type="module" src="http://localhost:3000/@vite/client"></script>
-        <script type="module" src="http://localhost:3000/resources/js/main.js"></script>
+        <script type="module" src="http://localhost:3000/resources/js/main.ts"></script>
     @endproduction
 </body>
 

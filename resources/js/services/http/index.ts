@@ -1,20 +1,11 @@
 import axios, {AxiosRequestConfig} from 'axios';
-import {Cache, RequestMiddleware, ResponseErrorMiddleware, ResponseMiddleware} from 'types/types';
+import {RequestMiddleware, ResponseErrorMiddleware, ResponseMiddleware} from 'types/types';
 
 const HEADERS_TO_TYPE: Record<string, string> = {
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'application/xlsx',
 };
 
-const CACHE_KEY = 'HTTP_CACHE';
 const baseURL = '/api';
-
-/** Cache duration in seconds */
-let cacheDuration = 10;
-
-// Not using storageService here, cause it always needs to be stored in the localStorage
-const preCache = localStorage.getItem(CACHE_KEY);
-// TODO :: how to test these branches?
-const cache: Cache = preCache ? JSON.parse(preCache) : {};
 
 const http = axios.create({
     baseURL,
@@ -46,35 +37,10 @@ http.interceptors.response.use(
     },
 );
 
-export const setCacheDuration = (value: number) => (cacheDuration = value);
-export const getCacheDuration = () => cacheDuration;
-
 /**
  * send a get request to the given endpoint
  */
-export const getRequest = async (endpoint: string, options?: AxiosRequestConfig) => {
-    // If there is no cache duration, then there is no need to use the cache
-    if (!cacheDuration) return getRequestWithoutCache(endpoint, options);
-
-    // get currentTimeStamp in seconds
-    const currentTimeStamp = Math.floor(Date.now() / 1000);
-    if (cache[endpoint] && !options) {
-        // if it has been less then the cache duration since last requested this get request, do nothing
-        if (currentTimeStamp - cache[endpoint] < cacheDuration) return;
-    }
-
-    const response = await http.get(endpoint, options);
-    cache[endpoint] = currentTimeStamp;
-    localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
-
-    return response;
-};
-
-/**
- * send a get request to the given endpoint without using cache
- */
-export const getRequestWithoutCache = async (endpoint: string, options?: AxiosRequestConfig) =>
-    http.get(endpoint, options);
+export const getRequest = async (endpoint: string, options?: AxiosRequestConfig) => http.get(endpoint, options);
 
 /**
  * send a post request to the given endpoint with the given data

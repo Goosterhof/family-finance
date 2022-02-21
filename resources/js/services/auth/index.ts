@@ -1,6 +1,6 @@
 import {Component, Ref, ref} from 'vue';
 
-import {getRequestWithoutCache, postRequest, registerResponseErrorMiddleware} from 'services/http';
+import {getRequest, postRequest, registerResponseErrorMiddleware} from 'services/http';
 import {addRoute, goToRoute, registerBeforeMiddleware} from 'services/router';
 import {clearStorage, getItemFromStorage, setItemInStorage} from 'services/storage';
 import {ResponseErrorMiddleware} from 'types/types';
@@ -105,7 +105,7 @@ export const logout = async () => {
 };
 
 export const checkIfLoggedIn = async () => {
-    const response = await getRequestWithoutCache(apiLoggedInCheckRoute);
+    const response = await getRequest(apiLoggedInCheckRoute);
 
     setLoggedInAndUser(response.data);
     return response;

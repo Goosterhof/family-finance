@@ -66,7 +66,7 @@ export default ({command}) => {
             manifest: true,
             outDir: 'public/js',
             rollupOptions: {
-                input: 'resources/js/main.js',
+                input: 'resources/js/main.ts',
             },
         },
         plugins,

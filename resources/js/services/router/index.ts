@@ -40,16 +40,14 @@ router.beforeEach((to, from, next) => {
     return next();
 });
 
-export const registerBeforeMiddleware = (middleware: NavigationGuard) => routerBeforeMiddleware.push(middleware);
+export const registerBeforeRouteMiddleware = (middleware: NavigationGuard) => routerBeforeMiddleware.push(middleware);
 
 const routerAfterMiddleware: NavigationHookAfter[] = [];
 router.afterEach((to, from) => {
-    for (const middlewareFunc of routerAfterMiddleware) 
-        middlewareFunc(to, from);
-    
+    for (const middlewareFunc of routerAfterMiddleware) middlewareFunc(to, from);
 });
 
-export const registerAfterMiddleware = (middleware: NavigationHookAfter) => routerAfterMiddleware.push(middleware);
+export const registerAfterRouteMiddleware = (middleware: NavigationHookAfter) => routerAfterMiddleware.push(middleware);
 
 export const addRoute = (route: RouteRecordRaw) => router.addRoute(route);
 

@@ -4,8 +4,8 @@
 </template>
 
 <script setup lang="ts">
-import {getCurrentRoute} from 'services/router';
 import {computed} from 'vue';
+import {getCurrentRoute} from 'services/router';
 
 const props = defineProps({depth: {type: Number, default: 0}});
 

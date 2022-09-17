@@ -1,5 +1,5 @@
 import {ref} from 'vue';
-import {registerRequestMiddleware, registerResponseMiddleware, registerResponseErrorMiddleware} from 'services/http';
+import {registerRequestMiddleware, registerResponseErrorMiddleware, registerResponseMiddleware} from 'services/http';
 
 const spinnerTimeout = 500;
 const minTimeSpinner = 1000;

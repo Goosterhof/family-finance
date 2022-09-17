@@ -1,4 +1,4 @@
-import {ref} from '@vue/reactivity';
+import {ref} from 'vue';
 
 export const isMobile = ref(false);
 

@@ -23,9 +23,9 @@
 
 <script setup lang="ts">
 import {isLoggedIn} from 'services/auth';
-import TopBar from 'components/TopBar.vue';
 import SideBar from 'components/SideBar.vue';
 import TheBreadcrumb from 'components/TheBreadcrumb.vue';
+import TopBar from 'components/TopBar.vue';
 </script>
 
 <style>

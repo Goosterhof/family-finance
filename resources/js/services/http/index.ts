@@ -1,5 +1,5 @@
-import axios, {AxiosRequestConfig} from 'axios';
 import {RequestMiddleware, ResponseErrorMiddleware, ResponseMiddleware} from 'types/types';
+import axios, {AxiosRequestConfig} from 'axios';
 
 const HEADERS_TO_TYPE: Record<string, string> = {
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'application/xlsx',
@@ -68,9 +68,9 @@ export const deleteRequest = async (endpoint: string) => http.delete(endpoint);
 export const download = async (endpoint: string, documentName?: string, type?: string) =>
     http.get(endpoint, {responseType: 'blob'}).then(response => {
         const contentType = response.headers['content-type'];
-        if (!type && contentType in HEADERS_TO_TYPE) {
+        if (!type && contentType in HEADERS_TO_TYPE) 
             type = HEADERS_TO_TYPE[contentType];
-        }
+        
         const blob = new Blob([response.data], {type});
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);

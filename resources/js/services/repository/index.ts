@@ -1,14 +1,13 @@
-import {deleteRequest, getRequest, postRequest} from 'services/http';
+import {Item} from 'types/types';
 import {Repository} from 'types/services/repository';
 import {StoreModule} from 'types/services/store';
-import {Item} from 'types/types';
+import {deleteRequest, getRequest, postRequest} from 'services/http';
 
 // eslint-disable-next-line max-lines-per-function
 export const repositoryFactory = <T extends Item, NewT>(
     moduleName: string,
     storeModule: StoreModule<T>,
-): Repository<T, NewT> => {
-    return {
+): Repository<T, NewT> => ({
         getAll: async () => {
             const response = await getRequest(moduleName);
             if (!response?.data) return;
@@ -34,5 +33,4 @@ export const repositoryFactory = <T extends Item, NewT>(
             if (!response?.data) return;
             storeModule.deleteById(id);
         },
-    };
-};
+    });

@@ -18,13 +18,13 @@
 </template>
 
 <script setup lang="ts">
-import {register} from 'services/auth';
 import {reactive} from 'vue';
-import CenterForm from 'layouts/CenterForm.vue';
-import BaseTextInput from 'components/base/BaseTextInput.vue';
+import {register} from 'services/auth';
+import BaseCheckboxInput from 'components/base/BaseCheckboxInput.vue';
 import BaseEmailInput from 'components/base/BaseEmailInput.vue';
 import BasePasswordInput from 'components/base/BasePasswordInput.vue';
-import BaseCheckboxInput from 'components/base/BaseCheckboxInput.vue';
+import BaseTextInput from 'components/base/BaseTextInput.vue';
+import CenterForm from 'layouts/CenterForm.vue';
 import TheSubmitButton from 'components/TheSubmitButton.vue';
 
 const credentials = reactive({

@@ -31,9 +31,9 @@
 </template>
 
 <script setup lang="ts">
-import {ref, watch} from 'vue';
-import {logout, loggedInUser} from 'services/auth';
 import {getCurrentRoute} from 'services/router';
+import {loggedInUser, logout} from 'services/auth';
+import {ref, watch} from 'vue';
 
 const profileDropdown = ref(false);
 

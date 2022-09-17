@@ -1,7 +1,7 @@
-import {createApp, defineComponent, h, Ref, ref} from 'vue';
+import {Ref, createApp, defineComponent, h, ref} from 'vue';
+import {ResponseErrorMiddleware, ResponseMiddleware, ToastMessage, ToastVariant} from 'types/types';
 import {registerResponseErrorMiddleware, registerResponseMiddleware} from 'services/http';
 import ToastComponent from './Toast.vue';
-import {ResponseErrorMiddleware, ResponseMiddleware, ToastMessage, ToastVariant} from 'types/types';
 
 const toastMessages: Ref<ToastMessage[]> = ref([]);
 
@@ -38,9 +38,9 @@ const hideToastMessageAfterDelay = (message: ToastMessage) => {
 
 const eventApp = defineComponent({
     render() {
-        const toasts = toastMessages.value.map(message => {
+        const toasts = toastMessages.value.map(message => 
             // @ts-ignore TODO :: ToastComponent throws error with vue-tsc command
-            return h(ToastComponent, {
+            h(ToastComponent, {
                 message: message.message,
                 show: message.show,
                 variant: message.variant,
@@ -48,8 +48,8 @@ const eventApp = defineComponent({
                 // TODO :: what if there are two of the same messages active?
                 // this will trow error
                 key: message.message,
-            });
-        });
+            }),
+        );
 
         return [
             // TODO :: make position of the toast container an option

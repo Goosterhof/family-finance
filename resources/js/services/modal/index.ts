@@ -1,5 +1,5 @@
+import {DefineComponent, Ref, createApp, defineComponent, h, markRaw, ref} from 'vue';
 import {ModalData} from 'types/types';
-import {createApp, defineComponent, h, ref, markRaw, DefineComponent, Ref} from 'vue';
 
 const modals: Ref<ModalData> = ref([]);
 
@@ -8,12 +8,10 @@ const eventApp = defineComponent({
         if (modals.value.length) document.body.classList.add('modal-open');
         else document.body.classList.remove('modal-open');
 
-        return modals.value.map(({modal, passingData}, index) => {
-            return h(modal, {
-                ...passingData,
-                onClose: () => modals.value.splice(index, 1),
-            });
-        });
+        return modals.value.map(({modal, passingData}, index) => h(modal, {
+            ...passingData,
+            onClose: () => modals.value.splice(index, 1),
+        }));
     },
 });
 

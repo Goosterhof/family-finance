@@ -17,9 +17,9 @@ export const getItemFromStorage = <T = unknown>(key: string, parse: boolean, def
 
     if (!value) return defaultValue;
 
-    if (typeof value === 'string' && parse) {
+    if (typeof value === 'string' && parse) 
         return JSON.parse(value);
-    }
+    
 
     return value as unknown as T;
 };

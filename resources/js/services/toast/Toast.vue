@@ -10,8 +10,8 @@
 </template>
 
 <script setup lang="ts">
-import {ToastVariant} from 'types/types';
 import {PropType} from 'vue';
+import {ToastVariant} from 'types/types';
 
 defineProps({
     message: {type: String, required: true},

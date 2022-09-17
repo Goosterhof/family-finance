@@ -1,11 +1,11 @@
 import {Component, Ref, ref} from 'vue';
 
-import {getRequest, postRequest, registerResponseErrorMiddleware} from 'services/http';
+import {LoggedInUser, LoginCredentials, RegisterCredentials, ResetPasswordData} from 'types/services/auth';
+import {NavigationGuard} from 'vue-router';
+import {ResponseErrorMiddleware} from 'types/types';
 import {addRoute, goToRoute, registerBeforeMiddleware} from 'services/router';
 import {clearStorage, getItemFromStorage, setItemInStorage} from 'services/storage';
-import {ResponseErrorMiddleware} from 'types/types';
-import {NavigationGuard} from 'vue-router';
-import {LoggedInUser, LoginCredentials, RegisterCredentials, ResetPasswordData} from 'types/services/auth';
+import {getRequest, postRequest, registerResponseErrorMiddleware} from 'services/http';
 
 const LOGIN_ROUTE_NAME = 'Login';
 export const FORGOT_PASSWORD_ROUTE_NAME = 'ForgotPassword';
@@ -13,8 +13,8 @@ const RESET_PASSWORD_ROUTE_NAME = 'ResetPassword';
 export const REGISTER_ROUTE_NAME = 'Register';
 
 const APP_NAME = 'Family Finance';
-const IS_LOGGED_IN_KEY = APP_NAME + ' is magical';
-const LOGGED_IN_USER_KEY = APP_NAME + ' is supreme';
+const IS_LOGGED_IN_KEY = `${APP_NAME  } is magical`;
+const LOGGED_IN_USER_KEY = `${APP_NAME  } is supreme`;
 
 const apiLoginRoute = '/login';
 const apiRegisterRoute = '/register';
@@ -39,9 +39,9 @@ const responseErrorMiddleware: ResponseErrorMiddleware = ({response}) => {
     if (!response) return;
     const {status} = response;
     // TODO :: make this work
-    if (status == 403) {
+    if (status == 403) 
         goToDefaultLoggedInPage();
-    } else if (status == 401) {
+    else if (status == 401) {
         // TODO :: if 401 returns, is it really logged out from the server?
         // only need to logout of the app, because on the backend the user is already logged out
         logoutOfApp();

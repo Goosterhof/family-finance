@@ -1,7 +1,7 @@
-import {repositoryFactory} from 'services/repository';
-import {storeModuleFactory} from 'services/store';
 import {Category, NewCategory} from 'types/models/category';
 import {ref} from 'vue';
+import {repositoryFactory} from 'services/repository';
+import {storeModuleFactory} from 'services/store';
 
 export const CATEGORIES_MODULE_NAME = 'categories';
 

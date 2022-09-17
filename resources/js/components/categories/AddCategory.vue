@@ -7,8 +7,8 @@
 </template>
 
 <script setup lang="ts">
-import {addToCategoryId, categoryRepository} from 'modules/categories';
 import {NewCategory} from 'types/models/category';
+import {addToCategoryId, categoryRepository} from 'modules/categories';
 import {ref} from 'vue';
 
 const newCategoryName = ref('');

@@ -15,8 +15,8 @@
 
 <script setup lang="ts">
 import {addToCategoryId, categoryRepository, categoryStoreModule} from 'modules/categories';
-import CategoryList from './CategoryList.vue';
 import AddCategory from './AddCategory.vue';
+import CategoryList from './CategoryList.vue';
 
 categoryRepository.getAll();
 

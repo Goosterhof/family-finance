@@ -1,7 +1,7 @@
+import {Item, State} from 'types/types';
+import {StoreModule} from 'types/services/store';
 import {computed, ref} from 'vue';
 import {getItemFromStorage, setItemInStorage} from 'services/storage';
-import {StoreModule} from 'types/services/store';
-import {Item, State} from 'types/types';
 
 /**
  * Creates a store module for the given module name.

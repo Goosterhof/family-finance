@@ -13,10 +13,10 @@
 
 <script lang="ts">
 import {Category} from 'types/models/category';
-import {defineComponent, PropType} from 'vue';
+import {PropType, defineComponent} from 'vue';
+import {addToCategoryId} from 'modules/categories';
 import AddCategory from './AddCategory.vue';
 import PlusIcon from 'icons/PlusIcon.vue';
-import {addToCategoryId} from 'modules/categories';
 
 const CategoryList = defineComponent({
     props: {

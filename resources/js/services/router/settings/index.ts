@@ -3,11 +3,11 @@
  * @typedef {import('vue-router').RouteRecordRaw} RouteRecordRaw
  * @typedef {import('types/services/router').RouteSettings} RouteSettings
  */
-import {Repository} from 'types/services/repository';
-import {RouteSettings} from 'types/services/router';
-import {Item, Translation} from 'types/types';
 import {Component, defineComponent, h} from 'vue';
+import {Item, Translation} from 'types/types';
+import {Repository} from 'types/services/repository';
 import {RouteRecordRaw} from 'vue-router';
+import {RouteSettings} from 'types/services/router';
 import MinimalRouterView from '../MinimalRouterView.vue';
 
 export const CREATE_PAGE_NAME = '.create';
@@ -46,19 +46,17 @@ const partialFactory = (
     part: typeof CREATE | typeof EDIT | typeof OVERVIEW | typeof SHOW,
     component: Component,
     translation: string,
-): RouteRecordRaw => {
-    return {
-        name: moduleName + nameConversion[part],
-        path: pathConversion[part],
-        component,
-        meta: {
-            auth: true,
-            cantSeeWhenLoggedIn: false,
-            title: translation + titleConversion[part],
-        },
-        children: undefined,
-    };
-};
+): RouteRecordRaw => ({
+    name: moduleName + nameConversion[part],
+    path: pathConversion[part],
+    component,
+    meta: {
+        auth: true,
+        cantSeeWhenLoggedIn: false,
+        title: translation + titleConversion[part],
+    },
+    children: undefined,
+});
 
 /**
  * Creates standard route settings.
@@ -82,18 +80,18 @@ export const createRouteSettings = (
         },
     };
 
-    if (createComponent) {
+    if (createComponent) 
         routeSettings[CREATE] = partialFactory(moduleName, CREATE, createComponent, translation.singular);
-    }
-    if (overviewComponent) {
+    
+    if (overviewComponent) 
         routeSettings[OVERVIEW] = partialFactory(moduleName, OVERVIEW, overviewComponent, translation.plural);
-    }
-    if (editComponent) {
+    
+    if (editComponent) 
         routeSettings[EDIT] = partialFactory(moduleName, EDIT, editComponent, translation.singular);
-    }
-    if (showComponent) {
+    
+    if (showComponent) 
         routeSettings[SHOW] = partialFactory(moduleName, SHOW, showComponent, translation.singular);
-    }
+    
 
     return routeSettings;
 };

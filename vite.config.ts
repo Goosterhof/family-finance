@@ -27,6 +27,7 @@ const testNodeTransformer: NodeTransform = node => {
     if (node.type !== 1 /** NodeTypes.ELEMENT  */) return;
     for (let index = 0; index < node.props.length; index++) {
         const {type, name} = node.props[index];
+        // eslint-disable-next-line no-magic-numbers
         if (type === 6 /** NodeTypes.ATTRIBUTE */ && testAttributes.includes(name)) {
             node.props.splice(index, 1);
             index--;

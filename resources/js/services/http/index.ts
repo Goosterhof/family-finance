@@ -1,102 +1,95 @@
-import {RequestMiddleware, ResponseErrorMiddleware, ResponseMiddleware} from 'types/types';
-import axios, {AxiosRequestConfig} from 'axios';
+import axios, {AxiosError, AxiosRequestConfig, AxiosResponse} from 'axios';
 
-const HEADERS_TO_TYPE: Record<string, string> = {
+const API_URL = import.meta.env.VITE_BASE_URL ? `${import.meta.env.VITE_BASE_URL}/api` : '/api';
+
+const HEADERS_TO_TYPE: {[type: string]: string} = {
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'application/xlsx',
 };
 
-const baseURL = '/api';
+const CLIENT_API = import.meta.env.BASE_URL === '/client/' ? `${API_URL}/client` : API_URL;
 
 const http = axios.create({
-    baseURL,
-    withCredentials: false,
+    baseURL: CLIENT_API,
+    withCredentials: CLIENT_API === `${location.origin}/api`,
     headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
     },
 });
 
-const requestMiddleware: RequestMiddleware[] = [];
-const responseMiddleware: ResponseMiddleware[] = [];
-const responseErrorMiddleware: ResponseErrorMiddleware[] = [];
+type AxiosResponseError = AxiosError<
+    {
+        message?: string;
+        errors?: {
+            [property: string]: string[];
+        };
+    },
+    unknown
+>;
+
+type RequestMiddlewareFunc = (response: AxiosRequestConfig) => void;
+type ResponseMiddlewareFunc = (response: AxiosResponse) => void;
+type ResponseErrorMiddlewareFunc = (error: AxiosResponseError) => void;
+
+const requestMiddleware: RequestMiddlewareFunc[] = [];
+const responseMiddleware: ResponseMiddlewareFunc[] = [];
+const responseErrorMiddleware: ResponseErrorMiddlewareFunc[] = [];
 
 http.interceptors.request.use(request => {
     for (const middleware of requestMiddleware) middleware(request);
+
     return request;
 });
 
 http.interceptors.response.use(
     response => {
         for (const middleware of responseMiddleware) middleware(response);
+
         return response;
     },
+    // eslint-disable-next-line promise/prefer-await-to-callbacks
     error => {
-        if (!error.response) return Promise.reject(error);
-        for (const middleware of responseErrorMiddleware) middleware(error);
+        if (!axios.isAxiosError(error)) return Promise.reject(error);
+
+        for (const middleware of responseErrorMiddleware) middleware(error as AxiosResponseError);
+
         return Promise.reject(error);
     },
 );
 
-/**
- * send a get request to the given endpoint
- */
-export const getRequest = async (endpoint: string, options?: AxiosRequestConfig) => http.get(endpoint, options);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getRequest = <T = any>(endpoint: string, options?: AxiosRequestConfig) => http.get<T>(endpoint, options);
+
+export const postRequest = (endpoint: string, data: unknown, options?: AxiosRequestConfig) =>
+    http.post(endpoint, data, options);
+
+export const deleteRequest = (endpoint: string) => http.delete(endpoint);
 
 /**
- * send a post request to the given endpoint with the given data
- */
-export const postRequest = async (endpoint: string, data: unknown) => http.post(endpoint, data);
-
-/**
- * send a put request to the given endpoint with the given data
- */
-export const putRequest = async (endpoint: string, data: unknown) => http.put(endpoint, data);
-
-/**
- * send a delete request to the given endpoint
- */
-export const deleteRequest = async (endpoint: string) => http.delete(endpoint);
-
-/**
- * download a file from the backend
- *
- * if you want a specific document name you can set document name
- * if it's not given, then it will try to resolve the filename from the response headers content-disposition
- *
+ * Download a file from the backend
  * type should be resolved automagically, if not, then you can pass the type
  */
-export const download = async (endpoint: string, documentName?: string, type?: string) =>
-    http.get(endpoint, {responseType: 'blob'}).then(response => {
-        const contentType = response.headers['content-type'];
-        if (!type && contentType in HEADERS_TO_TYPE) 
-            type = HEADERS_TO_TYPE[contentType];
-        
-        const blob = new Blob([response.data], {type});
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
+export const downloadRequest = async (endpoint: string, documentName: string, type?: string) => {
+    const response = await http.get(endpoint, {responseType: 'blob'});
+    const {data, headers} = response;
+    const actualType = type || HEADERS_TO_TYPE[headers['content-type']] || headers['content-type'];
+    if (!actualType) throw new Error('No content type found');
 
-        // If documentName is given use that as the document name
-        if (documentName) {
-            link.download = documentName;
-            link.click();
-            return response;
-        }
+    const blob = new Blob([data], {type: actualType});
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = documentName;
+    link.click();
+    return response;
+};
 
-        const contentHeaders = response.headers['content-disposition'];
+export const registerRequestMiddleware = (middlewareFunc: RequestMiddlewareFunc) => {
+    requestMiddleware.push(middlewareFunc);
+};
 
-        const fileNameString = 'filename="';
-        const firstIndex = contentHeaders.indexOf(fileNameString) + fileNameString.length;
-        // TODO :: do something when the firstindex is not found
-
-        const lastIndex = contentHeaders.slice(firstIndex).indexOf('"');
-        link.download = contentHeaders.slice(firstIndex, lastIndex);
-
-        link.click();
-        return response;
-    });
-
-export const registerRequestMiddleware = (middlewareFunc: RequestMiddleware) => requestMiddleware.push(middlewareFunc);
-export const registerResponseMiddleware = (middlewareFunc: ResponseMiddleware) =>
+export const registerResponseMiddleware = (middlewareFunc: ResponseMiddlewareFunc) => {
     responseMiddleware.push(middlewareFunc);
-export const registerResponseErrorMiddleware = (middlewareFunc: ResponseErrorMiddleware) =>
+};
+
+export const registerResponseErrorMiddleware = (middlewareFunc: ResponseErrorMiddlewareFunc) =>
     responseErrorMiddleware.push(middlewareFunc);

@@ -1,88 +1,73 @@
-import {Ref, createApp, defineComponent, h, ref} from 'vue';
-import {ResponseErrorMiddleware, ResponseMiddleware, ToastMessage, ToastVariant} from 'types/types';
+import {Toast} from 'types/services';
+import {constants} from 'http2';
+import {createApp, h, ref} from 'vue';
 import {registerResponseErrorMiddleware, registerResponseMiddleware} from 'services/http';
 import ToastComponent from './Toast.vue';
 
-const toastMessages: Ref<ToastMessage[]> = ref([]);
+const TOAST_DURATION = 5000;
+const TOAST_TIMEOUT = 300;
 
-/**
- * The default duration for a toast message.
- */
-const defaultToastMessageDuration = 1500;
+const toastContainer = document.createElement('div');
+document.body.appendChild(toastContainer);
 
-/**
- * Hide the toast message after a timeout and delete it from toastMessages
- */
-const hideToastMessage = (message: ToastMessage) => {
-    if (message.timeoutId) clearTimeout(message.timeoutId);
+const toasts = ref<Toast[]>([]);
 
-    // TODO :: because this is called from render the ref becomes itself
-    // and it's being called from the render function and outside the render function
-    if (message.show.value) message.show.value = false;
-    // @ts-ignore, see TODO above
-    else if (message.show) message.show = false;
+const hideToastMessage = (toast: Toast) => {
+    if (toast.timeoutId) clearTimeout(toast.timeoutId);
+    if (toast.show) toast.show = false;
 
-    message.timeoutId = setTimeout(() => {
-        const index = toastMessages.value.findIndex(t => t.message === message.message);
-        toastMessages.value.splice(index, 1);
-    }, 50);
+    toast.timeoutId = setTimeout(() => {
+        const allToasts = toasts.value;
+        const index = allToasts.findIndex(({message}) => message === toast.message);
+        allToasts.splice(index, 1);
+    }, TOAST_TIMEOUT);
 };
 
-/**
- * Hide the toast message after the given duration
- */
-const hideToastMessageAfterDelay = (message: ToastMessage) => {
-    if (message.timeoutId) clearTimeout(message.timeoutId);
-    message.timeoutId = setTimeout(() => hideToastMessage(message), message.duration);
+const hideToastMessageAfterDelay = (toast: Toast) => {
+    if (toast.timeoutId) clearTimeout(toast.timeoutId);
+    toast.timeoutId = setTimeout(() => hideToastMessage(toast), TOAST_DURATION);
 };
 
-const eventApp = defineComponent({
-    render() {
-        const toasts = toastMessages.value.map(message => 
-            // @ts-ignore TODO :: ToastComponent throws error with vue-tsc command
-            h(ToastComponent, {
-                message: message.message,
-                show: message.show,
-                variant: message.variant,
-                onHide: () => hideToastMessage(message),
-                // TODO :: what if there are two of the same messages active?
-                // this will trow error
-                key: message.message,
-            }),
-        );
-
-        return [
-            // TODO :: make position of the toast container an option
-            h('div', {class: 'toast-container position-absolute bottom-0 start-0', style: 'z-index:9999;'}, toasts),
-        ];
+createApp({
+    name: 'ToastContainer',
+    setup() {
+        return () => {
+            const toastMessages = toasts.value.map((toast, index) =>
+                h(ToastComponent, {
+                    toast,
+                    onHide: () => hideToastMessage(toast),
+                    key: index,
+                }),
+            );
+            return h(
+                'div',
+                {
+                    class: 'position-fixed bottom-0 start-0',
+                    style: 'z-index:9999;',
+                },
+                toastMessages,
+            );
+        };
     },
+}).mount(toastContainer);
+
+const createToast = (toast: Toast) => {
+    toasts.value.push(toast);
+    hideToastMessageAfterDelay(toast);
+};
+
+export const successToast = (message: string) => createToast({message, show: true, variant: 'success'});
+export const dangerToast = (message: string) => createToast({message, show: true, variant: 'danger'});
+export const infoToast = (message: string) => createToast({message, show: true, variant: 'info'});
+
+registerResponseMiddleware(({data}) => {
+    if (data?.message) successToast(data.message);
 });
 
-const eventContainer = document.createElement('div');
-document.body.appendChild(eventContainer);
-createApp(eventApp).mount(eventContainer);
-
-/**
- * Create a toast message
- */
-export const createToastMessage = (
-    message: string,
-    variant: ToastVariant = 'success',
-    duration = defaultToastMessageDuration,
-) => {
-    const toastMessage = {message, variant, duration, show: ref(true)};
-    hideToastMessageAfterDelay(toastMessage);
-    toastMessages.value.push(toastMessage);
-};
-
-const responseMiddleware: ResponseMiddleware = ({data}) => {
-    if (data && data.message) createToastMessage(data.message);
-};
-
-registerResponseMiddleware(responseMiddleware);
-
-const responseErrorMiddleware: ResponseErrorMiddleware = ({response}) => {
-    if (response && response.data.message) createToastMessage(response.data.message, 'danger');
-};
-
-registerResponseErrorMiddleware(responseErrorMiddleware);
+registerResponseErrorMiddleware(({response}) => {
+    if (!response) return;
+    const {data, status} = response;
+    if (!data?.message) return;
+    if (status === constants.HTTP_STATUS_UNAUTHORIZED) return infoToast(data.message);
+    dangerToast(data.message);
+});

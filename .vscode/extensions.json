@@ -4,7 +4,7 @@
         "neilbrayfield.php-docblocker",
         "valeryanm.vscode-phpsab",
         // vue/js extensions
-        "johnsoncodehk.volar",
+        "Vue.volar",
         "esbenp.prettier-vscode",
         "dbaeumer.vscode-eslint",
         // git extension

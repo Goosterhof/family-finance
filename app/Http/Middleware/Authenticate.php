@@ -3,9 +3,9 @@
 namespace App\Http\Middleware;
 
 use App\Exceptions\TokenException;
-use Tymon\JWTAuth\Exceptions\TokenExpiredException;
-use Tymon\JWTAuth\Exceptions\TokenInvalidException;
-use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
+use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenExpiredException;
+use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenInvalidException;
+use PHPOpenSourceSaver\JWTAuth\Http\Middleware\BaseMiddleware;
 
 // TODO :: refactor
 class Authenticate extends BaseMiddleware

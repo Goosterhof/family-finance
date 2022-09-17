@@ -9,7 +9,7 @@ use App\Http\Resources\CategoryResource;
 use App\Http\Responses\NoContentResponse;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Tymon\JWTAuth\JWTAuth;
+use PHPOpenSourceSaver\JWTAuth\JWTAuth;
 
 class CategoryController extends Controller
 {

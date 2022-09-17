@@ -30,3 +30,4 @@ debug.log
 .php_cs.cache
 eslint.out
 stats.html
+_ide_helper.php

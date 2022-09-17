@@ -1,7 +1,6 @@
 /* eslint-env node */
 import {config} from '@vue/test-utils';
 import {customFinds} from './plugins';
-
 import {expect} from 'vitest';
 
 config.plugins.VueWrapper.install(customFinds);

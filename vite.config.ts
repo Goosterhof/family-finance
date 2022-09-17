@@ -1,9 +1,8 @@
-import {visualizer} from 'rollup-plugin-visualizer';
-import {Options} from '@vitejs/plugin-vue';
 import {NodeTransform} from '@vue/compiler-core';
+import {visualizer} from 'rollup-plugin-visualizer';
 import copy from 'rollup-plugin-copy';
-import vue from '@vitejs/plugin-vue';
 import path from 'path';
+import vue, {Options} from '@vitejs/plugin-vue';
 
 const srcPath = path.resolve('./resources/js');
 
@@ -50,9 +49,7 @@ export default ({command}) => {
 
     const vueOptions: Options = {};
 
-    if (production) {
-        vueOptions.template = {compilerOptions: {nodeTransforms: [testNodeTransformer]}};
-    }
+    if (production) vueOptions.template = {compilerOptions: {nodeTransforms: [testNodeTransformer]}};
 
     plugins.push(vue(vueOptions));
 

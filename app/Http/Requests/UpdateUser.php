@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Http\Requests;
 
-use App\Rules\NameSpacesDashes;
 use App\Rules\BetterEmail;
+use App\Rules\NameSpacesDashes;
 
 class UpdateUser extends BaseFormRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -16,8 +17,8 @@ class UpdateUser extends BaseFormRequest
     public function rules()
     {
         return [
-            'first_name' => ['required', 'string', new NameSpacesDashes],
-            'last_name' => ['required', 'string', new NameSpacesDashes],
+            'firstName' => ['required', 'string', new NameSpacesDashes],
+            'lastName' => ['required', 'string', new NameSpacesDashes],
             'email' => ['required', 'string', new BetterEmail],
             'company_id' => 'required|integer',
         ];
@@ -31,8 +32,8 @@ class UpdateUser extends BaseFormRequest
     public function messages()
     {
         return [
-            'first_name.required' => 'Vul een voornaam in',
-            'last_name.required' => 'Vul een achternaam in',
+            'firstName.required' => 'Vul een voornaam in',
+            'lastName.required' => 'Vul een achternaam in',
             'email.required' => 'Vul een E-mailadres in',
             'company_id.required' => 'Selecteer een klant',
         ];

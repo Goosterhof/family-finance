@@ -17,7 +17,7 @@
                     :class="{show: profileDropdown}"
                     @click="profileDropdown = !profileDropdown"
                 >
-                    Hallo, {{ loggedInUser.first_name }}
+                    Hallo, {{ loggedInUser.firstName }}
                 </button>
                 <ul class="dropdown-menu" :class="{show: profileDropdown}">
                     <li><router-link class="dropdown-item" :to="{name: 'Profile'}">Profiel</router-link></li>

@@ -156,7 +156,8 @@
 
         "no-magic-numbers": ["error", {"ignore": [1]}],
 
-        "camelcase": ["error", {"properties": "never", "ignoreDestructuring": true}],
+        "@typescript-eslint/naming-convention": "error",
+        "camelcase": ["error"],
         /**
          * VUE ESLINT RULES
          */

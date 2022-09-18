@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Http\Requests;
 
 class RegisterUser extends BaseFormRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -13,12 +14,12 @@ class RegisterUser extends BaseFormRequest
     public function rules()
     {
         return [
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
+            'firstName' => 'required|string',
+            'lastName' => 'required|string',
             'email' => 'required|string',
             'family' => 'required|string',
-            'password' => 'required|same:repeat_password|min:12|max:255',
-            'repeat_password' => 'required|same:password|min:12|max:255',
+            'password' => 'required|same:repeatPassword|min:12|max:255',
+            'repeatPassword' => 'required|same:password|min:12|max:255',
             'rememberMe' => 'required',
         ];
     }

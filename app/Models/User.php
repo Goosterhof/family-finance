@@ -4,22 +4,30 @@ declare(strict_types = 1);
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\MustVerifyEmail;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 /**
  * The User class
  *
- * @property int $family_id
+ * @property int $familyId
  *
  * @property Family $family
  */
-class User extends Authenticatable implements JWTSubject
+class User extends BaseModel implements
+    AuthenticatableContract,
+    AuthorizableContract,
+    CanResetPasswordContract,
+    JWTSubject
 {
-    use HasFactory, Notifiable;
+    use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail;
 
     /**
      * The attributes that are mass assignable.
@@ -27,7 +35,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'password', 'family_id',
+        'firstName', 'lastName', 'email', 'password', 'familyId',
     ];
 
     /**

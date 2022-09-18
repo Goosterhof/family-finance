@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Database\Factories;
 
 use App\Models\Family;
@@ -16,7 +18,7 @@ class CategoryFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'family_id' => $this->faker->randomElement(Family::all()),
+            'familyId' => $this->faker->randomElement(Family::all()),
         ];
     }
 }

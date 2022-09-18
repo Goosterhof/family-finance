@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -34,7 +36,6 @@ class AuthController extends Controller
         $this->auth = $auth;
     }
 
-
     /**
      * Get a JWT via given credentials.
      *
@@ -63,11 +64,11 @@ class AuthController extends Controller
         $family = Family::create(['name' => $validated['family']]);
 
         User::create([
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
+            'firstName' => $validated['firstName'],
+            'lastName' => $validated['lastName'],
             'email' => $validated['email'],
             'password' => $validated['password'],
-            'family_id' => $family->id,
+            'familyId' => $family->id,
         ]);
 
         return $this->loginByCredentials($validated['email'], $validated['password'], $validated['rememberMe']);
@@ -91,19 +92,19 @@ class AuthController extends Controller
     public function logout(): NoContentResponse
     {
         $this->auth->invalidate();
-        return new NoContentResponse();
+        return new NoContentResponse;
     }
 
     /**
      * Login by the given credentials
      *
-     * @param string  $email
-     * @param string  $password
-     * @param boolean $rememberMe
+     * @param string $email
+     * @param string $password
+     * @param bool   $rememberMe
      *
      * @return JsonResponse
      */
-    private function loginByCredentials(string $email, string $password, bool $rememberMe):JsonResponse
+    private function loginByCredentials(string $email, string $password, bool $rememberMe): JsonResponse
     {
         $jwtTtl = $rememberMe ? self::JWT_TTL_REMEMBER : config('jwt.ttl');
         $this->auth->factory()->setTTL($jwtTtl);
@@ -117,11 +118,11 @@ class AuthController extends Controller
                     'message' => 'E-mail of wachtwoord is onjuist',
                     'errors' => [
                         'password' => [
-                            'probeer het opnieuw, of klik hieronder op "wachtwoord vergeten"'
-                        ]
-                    ]
+                            'probeer het opnieuw, of klik hieronder op "wachtwoord vergeten"',
+                        ],
+                    ],
                 ],
-                Response::HTTP_UNPROCESSABLE_ENTITY
+                Response::HTTP_UNPROCESSABLE_ENTITY,
             );
         }
 

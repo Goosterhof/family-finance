@@ -3,6 +3,7 @@ import axios, {AxiosError, AxiosRequestConfig, AxiosResponse} from 'axios';
 const API_URL = import.meta.env.VITE_BASE_URL ? `${import.meta.env.VITE_BASE_URL}/api` : '/api';
 
 const HEADERS_TO_TYPE: {[type: string]: string} = {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'application/xlsx',
 };
 
@@ -12,7 +13,9 @@ const http = axios.create({
     baseURL: CLIENT_API,
     withCredentials: CLIENT_API === `${location.origin}/api`,
     headers: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         Accept: 'application/json',
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         'Content-Type': 'application/json',
     },
 });

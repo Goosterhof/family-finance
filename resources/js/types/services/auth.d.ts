@@ -19,21 +19,21 @@ export interface LoginCredentials {
 }
 
 export interface RegisterCredentials extends LoginCredentials {
-    first_name: string;
-    last_name: string;
+    firstName: string;
+    lastName: string;
     family: string;
-    repeat_password: string;
+    repeatPassword: string;
 }
 
 export type ResetPasswordData = {
     password: string;
-    repeat_password: string;
+    repeatPassword: string;
 };
 
 export interface LoggedInUser extends Item {
-    first_name: string;
-    last_name: string;
+    firstName: string;
+    lastName: string;
     email: string;
     family: string;
-    family_members: User[];
+    familyMembers: User[];
 }

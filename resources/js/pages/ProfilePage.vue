@@ -22,8 +22,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="{first_name, last_name, email, id} in loggedInUser.family_members" :key="id">
-                                    <th scope="row">{{ first_name }} {{ last_name }}</th>
+                                <tr v-for="{firstName, lastName, email, id} in loggedInUser.familyMembers" :key="id">
+                                    <th scope="row">{{ firstName }} {{ lastName }}</th>
                                     <td>{{ email }}</td>
                                 </tr>
                             </tbody>

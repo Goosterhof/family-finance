@@ -56,7 +56,7 @@ class StoreCategoryRequest extends BaseFormRequest
          */
         $user = $this->auth->user();
         return array_merge(parent::validated($key = null, $default = null), [
-            'familyId' => $user->family_id,
+            'familyId' => $user->familyId,
         ]);
     }
 }

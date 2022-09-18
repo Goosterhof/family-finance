@@ -18,6 +18,7 @@ import {addToCategoryId} from 'modules/categories';
 import AddCategory from './AddCategory.vue';
 import PlusIcon from 'icons/PlusIcon.vue';
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const CategoryList = defineComponent({
     props: {
         categories: {
@@ -29,6 +30,7 @@ const CategoryList = defineComponent({
         return {addToCategoryId};
     },
 });
+// eslint-disable-next-line @typescript-eslint/naming-convention
 CategoryList.components = {CategoryList, AddCategory, PlusIcon};
 
 export default CategoryList;

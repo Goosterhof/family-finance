@@ -37,5 +37,5 @@
 
 <script setup lang="ts">
 import {loggedInUser} from 'services/auth';
-import CategoryCard from 'components/categories/CategoryCard.vue';
+import CategoryCard from 'domains/categories/components/CategoryCard.vue';
 </script>

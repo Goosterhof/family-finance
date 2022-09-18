@@ -5,7 +5,11 @@
             <button class="btn btn-sm" @click="addToCategoryId = category.id"><PlusIcon /></button>
         </div>
         <ul class="list-group list-group-flush">
-            <AddCategory v-if="addToCategoryId === category.id" />
+            <AddCategory
+                v-if="addToCategoryId === category.id"
+                :category-id="addToCategoryId"
+                @done="addToCategoryId = NaN"
+            />
             <CategoryList v-if="category.children.length" :categories="category.children" />
         </ul>
     </li>
@@ -13,8 +17,7 @@
 
 <script lang="ts">
 import {Category} from 'types/models/category';
-import {PropType, defineComponent} from 'vue';
-import {addToCategoryId} from 'modules/categories';
+import {PropType, defineComponent, ref} from 'vue';
 import AddCategory from './AddCategory.vue';
 import PlusIcon from 'icons/PlusIcon.vue';
 
@@ -27,7 +30,7 @@ const CategoryList = defineComponent({
         },
     },
     setup() {
-        return {addToCategoryId};
+        return {addToCategoryId: ref(NaN)};
     },
 });
 // eslint-disable-next-line @typescript-eslint/naming-convention

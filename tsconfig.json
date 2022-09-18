@@ -27,7 +27,7 @@
             "components/*": ["./components/*"],
             "pages/*": ["./pages/*"],
             "router/*": ["./router/*"],
-            "modules/*": ["./modules/*"],
+            "domains/*": ["./domains/*"],
             "helpers/*": ["./helpers/*"],
             "services/*": ["./services/*"],
             "layouts/*": ["./layouts/*"],

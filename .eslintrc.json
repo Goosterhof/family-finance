@@ -72,7 +72,6 @@
         "max-depth": ["error", 4],
         "max-statements-per-line": ["error", {"max": 2}],
         "array-callback-return": "error",
-        "require-atomic-updates": "error",
         "block-scoped-var": "error",
         "curly": ["error", "multi-or-nest"],
         "eqeqeq": "error",

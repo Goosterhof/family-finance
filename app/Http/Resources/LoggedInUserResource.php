@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Http\Resources;
 
 class LoggedInUserResource extends UserResource
@@ -17,7 +19,7 @@ class LoggedInUserResource extends UserResource
         $userData = parent::toArray($request);
 
         $userData['family'] = $this->family->name;
-        $userData['family_members'] = UserResource::collection($this->family->users);
+        $userData['familyMembers'] = UserResource::collection($this->family->users);
 
         return $userData;
     }

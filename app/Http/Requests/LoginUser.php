@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Http\Requests;
 
 class LoginUser extends BaseFormRequest
@@ -14,7 +16,7 @@ class LoginUser extends BaseFormRequest
         return [
             'email' => ['required', 'string'],
             'password' => 'required|min:5|max:255',
-            'rememberMe' => 'required'
+            'rememberMe' => 'required',
         ];
     }
 

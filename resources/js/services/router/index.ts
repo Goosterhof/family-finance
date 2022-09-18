@@ -1,15 +1,15 @@
+import {CREATE_PAGE_NAME, EDIT_PAGE_NAME, OVERVIEW_PAGE_NAME, SHOW_PAGE_NAME} from 'services/router/settings';
 import {
-    createRouter,
-    createWebHistory,
     LocationQuery,
-    isNavigationFailure,
+    NavigationFailureType,
     NavigationGuard,
     NavigationHookAfter,
     RouteLocationRaw,
     RouteRecordRaw,
-    NavigationFailureType,
+    createRouter,
+    createWebHistory,
+    isNavigationFailure,
 } from 'vue-router';
-import {CREATE_PAGE_NAME, EDIT_PAGE_NAME, OVERVIEW_PAGE_NAME, SHOW_PAGE_NAME} from 'services/router/settings';
 import {RouteSettings} from 'types/services/router';
 
 export const router = createRouter({
@@ -40,16 +40,14 @@ router.beforeEach((to, from, next) => {
     return next();
 });
 
-export const registerBeforeMiddleware = (middleware: NavigationGuard) => routerBeforeMiddleware.push(middleware);
+export const registerBeforeRouteMiddleware = (middleware: NavigationGuard) => routerBeforeMiddleware.push(middleware);
 
 const routerAfterMiddleware: NavigationHookAfter[] = [];
 router.afterEach((to, from) => {
-    for (const middlewareFunc of routerAfterMiddleware) {
-        middlewareFunc(to, from);
-    }
+    for (const middlewareFunc of routerAfterMiddleware) middlewareFunc(to, from);
 });
 
-export const registerAfterMiddleware = (middleware: NavigationHookAfter) => routerAfterMiddleware.push(middleware);
+export const registerAfterRouteMiddleware = (middleware: NavigationHookAfter) => routerAfterMiddleware.push(middleware);
 
 export const addRoute = (route: RouteRecordRaw) => router.addRoute(route);
 

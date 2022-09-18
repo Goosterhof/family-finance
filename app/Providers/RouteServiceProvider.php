@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -58,7 +60,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->router->group([
             'middleware' => ['api'],
-            'prefix' => 'api'
+            'prefix' => 'api',
         ], function ($router) {
             // $router is injected in this function, so it's available in the routes/api.php
             require base_path('routes/api.php');

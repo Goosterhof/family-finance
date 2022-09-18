@@ -17,7 +17,7 @@
                     :class="{show: profileDropdown}"
                     @click="profileDropdown = !profileDropdown"
                 >
-                    Hallo, {{ loggedInUser.first_name }}
+                    Hallo, {{ loggedInUser.firstName }}
                 </button>
                 <ul class="dropdown-menu" :class="{show: profileDropdown}">
                     <li><router-link class="dropdown-item" :to="{name: 'Profile'}">Profiel</router-link></li>
@@ -31,9 +31,9 @@
 </template>
 
 <script setup lang="ts">
-import {ref, watch} from 'vue';
-import {logout, loggedInUser} from 'services/auth';
 import {getCurrentRoute} from 'services/router';
+import {loggedInUser, logout} from 'services/auth';
+import {ref, watch} from 'vue';
 
 const profileDropdown = ref(false);
 

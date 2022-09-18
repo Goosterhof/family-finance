@@ -2,29 +2,46 @@
  * Set the given value in the storage under the given key
  * If the value is not of type String, it will be converted to String
  */
-export const setItemInStorage = (key: string, value: unknown): void => {
-    const stringValue = typeof value === 'string' ? value : JSON.stringify(value);
-    localStorage.setItem(key, stringValue);
-};
+export const putInStorage = (key: string, value: unknown) => {
+    const valueToStore = typeof value === 'string' ? value : JSON.stringify(value);
 
-/**
- * Get the value from the storage under the given key.
- * Returns null if value is not found or if keepALive is false
- */
-export const getItemFromStorage = <T = unknown>(key: string, parse: boolean, defaultValue?: T): T | undefined => {
-    const value = localStorage.getItem(key);
-    // TODO :: Stryker ConditionalExpression survived, when mutated to false
+    try {
+        // eslint-disable-next-line no-restricted-syntax
+        localStorage.setItem(key, valueToStore);
+    } catch (error) {
+        // We dont do anything with the error, cause the storage is only used for user experience
+        if (error instanceof DOMException) {
+            if (error.code === error.QUOTA_EXCEEDED_ERR) {
+                // eslint-disable-next-line no-console
+                return console.error('local storage is full!');
+            }
+        }
 
-    if (!value) return defaultValue;
-
-    if (typeof value === 'string' && parse) {
-        return JSON.parse(value);
+        // eslint-disable-next-line no-console
+        return console.error(error);
     }
-
-    return value as unknown as T;
 };
 
-/** Empty the storage */
-export const clearStorage = (): void => {
+type GetFromStorage = {
+    <T>(key: string): T | undefined;
+    <T>(key: string, defaultValue: T): T;
+};
+
+export const getFromStorage: GetFromStorage = <T>(key: string, defaultValue?: T): T | undefined => {
+    // eslint-disable-next-line no-restricted-syntax
+    const storedValue = localStorage.getItem(key);
+    if (!storedValue) return defaultValue;
+
+    try {
+        return JSON.parse(storedValue);
+    } catch (_) {
+        // When does this occur? Should test this in test
+        // Bit of a hacky way to ensure we return type T
+        return storedValue as unknown as T;
+    }
+};
+
+export const clearStorage = () => {
+    // eslint-disable-next-line no-restricted-syntax
     localStorage.clear();
 };

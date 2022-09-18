@@ -1,10 +1,14 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Providers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Telescope\TelescopeServiceProvider as LaravelTelescopeServiceProvider;
+use URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,11 +29,11 @@ class AppServiceProvider extends ServiceProvider
 
         if ($this->app->isLocal()) {
             $this->app->register(TelescopeServiceProvider::class);
-            $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
+            $this->app->register(LaravelTelescopeServiceProvider::class);
         }
 
         if ($this->app->environment() === 'production') {
-            \URL::forceScheme('https');
+            URL::forceScheme('https');
         }
     }
 

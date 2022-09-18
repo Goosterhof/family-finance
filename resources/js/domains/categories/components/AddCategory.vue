@@ -7,18 +7,22 @@
 </template>
 
 <script setup lang="ts">
-import {addToCategoryId, categoryRepository} from 'modules/categories';
-import {NewCategory} from 'types/models/category';
+import {Category} from 'types/models/category';
+import {New} from 'types/generics';
+import {categoryRepository} from 'domains/categories';
 import {ref} from 'vue';
+import {successToast} from 'services/toast';
+
+const props = defineProps<{categoryId: number | null}>();
+const emit = defineEmits<{(name: 'done'): void}>();
 
 const newCategoryName = ref('');
 
 const submitNewCategory = async () => {
-    const data: NewCategory = {name: newCategoryName.value};
-    if (addToCategoryId.value > 0) data.category_id = addToCategoryId.value;
+    const data: New<Category> = {name: newCategoryName.value, children: [], categoryId: props.categoryId};
     await categoryRepository.create(data);
+    successToast('Categorie aangemaakt');
     await categoryRepository.getAll();
-    newCategoryName.value = '';
-    addToCategoryId.value = -1;
+    emit('done');
 };
 </script>

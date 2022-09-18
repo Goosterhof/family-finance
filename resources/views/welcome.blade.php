@@ -11,7 +11,7 @@
         @php
             $manifest = json_decode(file_get_contents(public_path('js/manifest.json')), true);
         @endphp
-        @foreach ($manifest['resources/js/main.js']['imports'] as $importName)
+        @foreach ($manifest['resources/js/main.js']['dynamicImports'] as $importName)
             <link rel="modulepreload" href="/js/{{ $manifest[$importName]['file'] }}" as="script">
         @endforeach
         @foreach ($manifest as $export)
@@ -34,8 +34,8 @@
         @endphp
         <script type="module" src="/js/{{ $manifest['resources/js/main.js']['file'] }}"></script>
     @else
-        <script type="module" src="http://localhost:3000/@vite/client"></script>
-        <script type="module" src="http://localhost:3000/resources/js/main.ts"></script>
+        <script type="module" src="{{env('VITE_WATCHER', 'http://localhost:3000/')}}{!!'@'!!}vite/client"></script>
+        <script type="module" src="{{env('VITE_WATCHER', 'http://localhost:3000/')}}resources/js/main.ts"></script>
     @endproduction
 </body>
 

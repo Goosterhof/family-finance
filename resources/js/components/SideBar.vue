@@ -178,9 +178,10 @@
 </template>
 
 <script setup lang="ts">
-import {isMobile} from 'helpers/mobile';
 import {getCurrentRoute} from 'services/router';
+import {isMobile} from 'helpers/mobile';
 import {ref, watch} from 'vue';
+
 const mobileDropdown = ref(false);
 
 watch(

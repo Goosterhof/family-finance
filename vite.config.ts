@@ -1,9 +1,8 @@
-import {visualizer} from 'rollup-plugin-visualizer';
-import {Options} from '@vitejs/plugin-vue';
 import {NodeTransform} from '@vue/compiler-core';
+import {visualizer} from 'rollup-plugin-visualizer';
 import copy from 'rollup-plugin-copy';
-import vue from '@vitejs/plugin-vue';
 import path from 'path';
+import vue, {Options} from '@vitejs/plugin-vue';
 
 const srcPath = path.resolve('./resources/js');
 
@@ -13,7 +12,7 @@ const resolve = {
         icons: path.join(srcPath, 'icons'),
         pages: path.join(srcPath, 'pages'),
         router: path.join(srcPath, 'router'),
-        modules: path.join(srcPath, 'modules'),
+        domains: path.join(srcPath, 'domains'),
         layouts: path.join(srcPath, 'layouts'),
 
         helpers: path.join(srcPath, 'helpers'),
@@ -28,6 +27,7 @@ const testNodeTransformer: NodeTransform = node => {
     if (node.type !== 1 /** NodeTypes.ELEMENT  */) return;
     for (let index = 0; index < node.props.length; index++) {
         const {type, name} = node.props[index];
+        // eslint-disable-next-line no-magic-numbers
         if (type === 6 /** NodeTypes.ATTRIBUTE */ && testAttributes.includes(name)) {
             node.props.splice(index, 1);
             index--;
@@ -50,9 +50,7 @@ export default ({command}) => {
 
     const vueOptions: Options = {};
 
-    if (production) {
-        vueOptions.template = {compilerOptions: {nodeTransforms: [testNodeTransformer]}};
-    }
+    if (production) vueOptions.template = {compilerOptions: {nodeTransforms: [testNodeTransformer]}};
 
     plugins.push(vue(vueOptions));
 

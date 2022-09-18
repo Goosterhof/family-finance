@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Http\Responses\NoContentResponse;
-use App\Models\User;
+use App\Models\Category;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use PHPOpenSourceSaver\JWTAuth\JWTAuth;
 
@@ -44,7 +45,7 @@ class CategoryController extends Controller
          */
         $user = $this->auth->user();
         return CategoryResource::collection(
-            $user->family->categories()->whereNull('category_id')->get()
+            $user->family->categories()->whereNull('category_id')->get(),
         );
     }
 
@@ -58,7 +59,7 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request): NoContentResponse
     {
         Category::create($request->validated());
-        return new NoContentResponse();
+        return new NoContentResponse;
     }
 
     /**

@@ -1,11 +1,9 @@
 import {Component, Ref, ref} from 'vue';
-
-import {getRequest, postRequest, registerResponseErrorMiddleware} from 'services/http';
-import {addRoute, goToRoute, registerBeforeMiddleware} from 'services/router';
-import {clearStorage, getItemFromStorage, setItemInStorage} from 'services/storage';
-import {ResponseErrorMiddleware} from 'types/types';
-import {NavigationGuard} from 'vue-router';
 import {LoggedInUser, LoginCredentials, RegisterCredentials, ResetPasswordData} from 'types/services/auth';
+import {StatusCodes} from 'http-status-codes';
+import {addRoute, goToRoute, registerBeforeRouteMiddleware} from 'services/router';
+import {clearStorage, getFromStorage, putInStorage} from 'services/storage';
+import {getRequest, postRequest, registerResponseErrorMiddleware} from 'services/http';
 
 const LOGIN_ROUTE_NAME = 'Login';
 export const FORGOT_PASSWORD_ROUTE_NAME = 'ForgotPassword';
@@ -13,8 +11,8 @@ const RESET_PASSWORD_ROUTE_NAME = 'ResetPassword';
 export const REGISTER_ROUTE_NAME = 'Register';
 
 const APP_NAME = 'Family Finance';
-const IS_LOGGED_IN_KEY = APP_NAME + ' is magical';
-const LOGGED_IN_USER_KEY = APP_NAME + ' is supreme';
+const IS_LOGGED_IN_KEY = `${APP_NAME} is magical`;
+const LOGGED_IN_USER_KEY = `${APP_NAME} is supreme`;
 
 const apiLoginRoute = '/login';
 const apiRegisterRoute = '/register';
@@ -30,27 +28,20 @@ export const goToResetPasswordPage = () => goToRoute(RESET_PASSWORD_ROUTE_NAME);
 export const goToForgotPasswordPage = () => goToRoute(FORGOT_PASSWORD_ROUTE_NAME);
 export const goToRegisterPage = () => goToRoute(REGISTER_ROUTE_NAME);
 
-export const isLoggedIn: Ref<boolean> = ref(!!getItemFromStorage<boolean>(IS_LOGGED_IN_KEY, true, false));
-export const loggedInUser: Ref<LoggedInUser | undefined> = ref(
-    getItemFromStorage<LoggedInUser>(LOGGED_IN_USER_KEY, true),
-);
+export const isLoggedIn: Ref<boolean> = ref(!!getFromStorage<boolean>(IS_LOGGED_IN_KEY, false));
+export const loggedInUser: Ref<LoggedInUser | undefined> = ref(getFromStorage<LoggedInUser>(LOGGED_IN_USER_KEY));
 
-const responseErrorMiddleware: ResponseErrorMiddleware = ({response}) => {
+registerResponseErrorMiddleware(({response}) => {
     if (!response) return;
     const {status} = response;
-    // TODO :: make this work
-    if (status == 403) {
-        goToDefaultLoggedInPage();
-    } else if (status == 401) {
-        // TODO :: if 401 returns, is it really logged out from the server?
+    if (status === StatusCodes.FORBIDDEN) goToDefaultLoggedInPage();
+    else if (status === StatusCodes.UNAUTHORIZED) {
         // only need to logout of the app, because on the backend the user is already logged out
         logoutOfApp();
     }
-};
+});
 
-registerResponseErrorMiddleware(responseErrorMiddleware);
-
-const beforeMiddleware: NavigationGuard = ({meta}) => {
+registerBeforeRouteMiddleware(({meta}) => {
     if (!isLoggedIn.value && meta.auth) {
         goToLoginPage();
         return true;
@@ -62,22 +53,19 @@ const beforeMiddleware: NavigationGuard = ({meta}) => {
     }
 
     return false;
-};
-
-registerBeforeMiddleware(beforeMiddleware);
+});
 
 const setLoggedInAndUser = (user: LoggedInUser) => {
     // set the logged in user
     loggedInUser.value = user;
-    setItemInStorage(LOGGED_IN_USER_KEY, user);
+    putInStorage(LOGGED_IN_USER_KEY, user);
     // set is logged in
     isLoggedIn.value = true;
-    setItemInStorage(IS_LOGGED_IN_KEY, true);
+    putInStorage(IS_LOGGED_IN_KEY, true);
 };
 
 const logoutOfApp = () => {
     clearStorage();
-    // TODO :: or reload state? transition from this is not rly smooth
     window.location.reload();
 };
 

@@ -4,13 +4,13 @@
 </template>
 
 <script setup lang="ts">
-import {getCurrentRoute} from 'services/router';
 import {computed} from 'vue';
+import {getCurrentRoute} from 'services/router';
 
 const props = defineProps({depth: {type: Number, default: 0}});
 
 const component = computed(() => {
     const matched = getCurrentRoute().value.matched[props.depth];
-    return matched && matched.components.default;
+    return matched && matched.components?.default;
 });
 </script>

@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Http\Requests;
 
 class UpdatePassword extends BaseFormRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -15,7 +16,7 @@ class UpdatePassword extends BaseFormRequest
         return [
             'token' => 'required',
             'password' => 'required|min:12|max:255',
-            'password2' => 'required|same:password|min:12|max:255'
+            'password2' => 'required|same:password|min:12|max:255',
         ];
     }
 

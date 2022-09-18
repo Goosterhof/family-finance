@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Database\Factories;
 
 use App\Models\Family;
@@ -23,10 +25,10 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'first_name' => $this->faker->firstName(),
-            'last_name' => $this->faker->lastName(),
+            'firstName' => $this->faker->firstName(),
+            'lastName' => $this->faker->lastName(),
             'email' => $this->faker->unique()->safeEmail(),
-            'family_id' => $this->faker->randomElement(Family::all()),
+            'familyId' => $this->faker->randomElement(Family::all()),
             'password' => $this->faker->password(),
         ];
     }

@@ -1,29 +1,25 @@
-import {defineComponent, h, ref} from 'vue';
-import {registerResponseErrorMiddleware} from 'services/http';
-import {registerAfterMiddleware} from 'services/router';
-import {ErrorBagRef, ResponseErrorMiddleware} from 'types/types';
-import {NavigationHookAfter} from 'vue-router';
+import {computed, ref} from 'vue';
+import {registerAfterRouteMiddleware} from '../router';
+import {registerRequestMiddleware, registerResponseErrorMiddleware} from '../http';
 
-const errors: ErrorBagRef = ref({});
-
-export const routeMiddleware: NavigationHookAfter = () => (errors.value = {});
-registerAfterMiddleware(routeMiddleware);
-
-export const responseErrorMiddleware: ResponseErrorMiddleware = ({response}) => {
-    if (response && response.data.errors) errors.value = response.data.errors;
+type ErrorBag = {
+    [property: string]: string[];
 };
-registerResponseErrorMiddleware(responseErrorMiddleware);
 
-export const BaseFormError = defineComponent({
-    props: {property: {type: String, required: true}},
-    setup: props => () => {
-        const foundErrors = Object.keys(errors.value).reduce((acc, errorProperty) => {
-            if (errorProperty.includes(props.property)) {
-                acc.push(...errors.value[errorProperty]);
-            }
-            return acc;
-        }, [] as string[]);
-        if (!foundErrors.length) return;
-        return h('div', {class: 'invalid-feedback d-block'}, [foundErrors.join(', ')]);
-    },
+const errorBag = ref<ErrorBag>({});
+
+export const getErrorBag = computed(() => errorBag.value);
+
+export const getErrorByProperty = (property: string) => computed(() => errorBag.value[property]);
+export const setErrorByProperty = (property: string, error: string[]) => (errorBag.value[property] = error);
+
+export const setErrorBag = (bag: ErrorBag) => (errorBag.value = bag);
+
+export const destroyErrors = () => (errorBag.value = {});
+
+registerAfterRouteMiddleware(destroyErrors);
+registerRequestMiddleware(destroyErrors);
+registerResponseErrorMiddleware(({response}) => {
+    if (!response || !response.data?.errors) return;
+    setErrorBag(response.data.errors);
 });

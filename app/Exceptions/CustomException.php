@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Exceptions;
 
 use Exception;
@@ -8,8 +10,8 @@ use Illuminate\Http\Response;
 
 class CustomException extends Exception
 {
-
     protected $responseCode = Response::HTTP_INTERNAL_SERVER_ERROR;
+
     /**
      * Render the exception into an HTTP response.
      *

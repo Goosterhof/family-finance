@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\BetterEmail;
 
 class StoreResetPassword extends BaseFormRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -28,7 +28,7 @@ class StoreResetPassword extends BaseFormRequest
     public function messages()
     {
         return [
-            'email.required' => 'Voer een e-mailadres in'
+            'email.required' => 'Voer een e-mailadres in',
         ];
     }
 }

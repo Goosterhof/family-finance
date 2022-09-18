@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Exports;
 
 use App\Models\Company;
@@ -10,16 +12,13 @@ class CompanyExport implements WithMultipleSheets
 {
     use Exportable;
 
-    protected Company $company;
-
     /**
      * The constructor
      *
      * @param Company $company
      */
-    public function __construct(Company $company)
+    public function __construct(protected Company $company)
     {
-        $this->company = $company;
     }
 
     /**

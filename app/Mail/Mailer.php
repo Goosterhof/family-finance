@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Mail;
 
-use App\Models\NewUser;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -40,13 +40,13 @@ class Mailer extends Mailable
                     ->view('emails.inviteuser')
                     ->with([
                         'token' => $this->user->token,
-                        'email' => $this->user->email
+                        'email' => $this->user->email,
                     ]);
             case 'passwordreset':
                 return $this->view('emails.passwordreset')
                     ->with([
                         'token' => $this->user->token,
-                        'email' => $this->user->email
+                        'email' => $this->user->email,
                     ]);
         }
     }

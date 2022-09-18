@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Exports;
 
 use App\Models\Profile;
@@ -11,17 +13,13 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 
 class ProfileExport implements FromArray, WithHeadings, WithMapping, WithTitle, ShouldAutoSize
 {
-
-    protected Profile $profile;
-
     /**
      * The constructor
      *
      * @param Profile $profile
      */
-    public function __construct(Profile $profile)
+    public function __construct(protected Profile $profile)
     {
-        $this->profile = $profile;
     }
 
     /**

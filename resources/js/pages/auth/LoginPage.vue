@@ -16,9 +16,9 @@
 <script setup lang="ts">
 import {FORGOT_PASSWORD_ROUTE_NAME, REGISTER_ROUTE_NAME, login} from 'services/auth';
 import {reactive} from 'vue';
-import BaseCheckboxInput from '../../components/base/BaseCheckboxInput.vue';
-import BaseEmailInput from '../../components/base/BaseEmailInput.vue';
-import BasePasswordInput from '../../components/base/BasePasswordInput.vue';
+import BaseCheckboxInput from 'components/base/BaseCheckboxInput.vue';
+import BaseEmailInput from 'components/base/BaseEmailInput.vue';
+import BasePasswordInput from 'components/base/BasePasswordInput.vue';
 import CenterForm from 'layouts/CenterForm.vue';
 import TheSubmitButton from 'components/TheSubmitButton.vue';
 

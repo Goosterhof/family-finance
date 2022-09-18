@@ -80,25 +80,22 @@ export const createRouteSettings = (
         },
     };
 
-    if (createComponent) 
+    if (createComponent)
         routeSettings[CREATE] = partialFactory(moduleName, CREATE, createComponent, translation.singular);
-    
-    if (overviewComponent) 
+
+    if (overviewComponent)
         routeSettings[OVERVIEW] = partialFactory(moduleName, OVERVIEW, overviewComponent, translation.plural);
-    
-    if (editComponent) 
-        routeSettings[EDIT] = partialFactory(moduleName, EDIT, editComponent, translation.singular);
-    
-    if (showComponent) 
-        routeSettings[SHOW] = partialFactory(moduleName, SHOW, showComponent, translation.singular);
-    
+
+    if (editComponent) routeSettings[EDIT] = partialFactory(moduleName, EDIT, editComponent, translation.singular);
+
+    if (showComponent) routeSettings[SHOW] = partialFactory(moduleName, SHOW, showComponent, translation.singular);
 
     return routeSettings;
 };
 
-export const createBaseComponent = <T extends Item, NewT>(repository?: Repository<T, NewT>) =>
+export const createBaseComponent = <T extends Item>(repository?: Repository<T>) =>
     defineComponent({
         name: 'BasePage',
-        mounted: async () => await repository?.getAll(),
+        mounted: () => repository?.getAll(),
         render: () => h(MinimalRouterView, {depth: 1}),
     });

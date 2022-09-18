@@ -7,18 +7,16 @@
 </template>
 
 <script setup lang="ts">
-import {NewCategory} from 'types/models/category';
+import {Category} from 'types/models/category';
+import {New} from 'types/generics';
 import {addToCategoryId, categoryRepository} from 'modules/categories';
 import {ref} from 'vue';
 
 const newCategoryName = ref('');
 
 const submitNewCategory = async () => {
-    const data: NewCategory = {name: newCategoryName.value};
-    if (addToCategoryId.value > 0) data.category_id = addToCategoryId.value;
+    const data: New<Category> = {name: newCategoryName.value, children: [], categoryId: addToCategoryId.value};
     await categoryRepository.create(data);
     await categoryRepository.getAll();
-    newCategoryName.value = '';
-    addToCategoryId.value = -1;
 };
 </script>

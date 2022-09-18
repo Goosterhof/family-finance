@@ -34,16 +34,19 @@ class StoreCategoryRequest extends BaseFormRequest
     {
         return [
             'name' => ['required', 'min:3'],
-            'category_id' => ['nullable', new Exists('categories', 'id')]
+            'categoryId' => ['nullable', new Exists('categories', 'id')]
         ];
     }
 
     /**
      * Add family id after validation.
      *
+     * @param string|null $key
+     * @param mixed       $default
+     *
      * @return array
      */
-    public function validated(): array
+    public function validated($key = null, $default = null): array
     {
         /**
          * The authentication user
@@ -51,7 +54,7 @@ class StoreCategoryRequest extends BaseFormRequest
          * @var User
          */
         $user = $this->auth->user();
-        return array_merge(parent::validated(), [
+        return array_merge(parent::validated($key = null, $default = null), [
             'family_id' => $user->family_id
         ]);
     }

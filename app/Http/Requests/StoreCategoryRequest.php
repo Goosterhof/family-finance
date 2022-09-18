@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Http\Requests;
 
-use App\Models\User;
 use Illuminate\Validation\Rules\Exists;
 use PHPOpenSourceSaver\JWTAuth\JWTAuth;
 
@@ -34,7 +35,7 @@ class StoreCategoryRequest extends BaseFormRequest
     {
         return [
             'name' => ['required', 'min:3'],
-            'categoryId' => ['nullable', new Exists('categories', 'id')]
+            'categoryId' => ['nullable', new Exists('categories', 'id')],
         ];
     }
 
@@ -51,11 +52,11 @@ class StoreCategoryRequest extends BaseFormRequest
         /**
          * The authentication user
          *
-         * @var User
+         * @var \App\Models\User
          */
         $user = $this->auth->user();
         return array_merge(parent::validated($key = null, $default = null), [
-            'family_id' => $user->family_id
+            'familyId' => $user->family_id,
         ]);
     }
 }

@@ -1,9 +1,8 @@
 import {Component, Ref, ref} from 'vue';
-
 import {LoggedInUser, LoginCredentials, RegisterCredentials, ResetPasswordData} from 'types/services/auth';
+import {StatusCodes} from 'http-status-codes';
 import {addRoute, goToRoute, registerBeforeRouteMiddleware} from 'services/router';
 import {clearStorage, getFromStorage, putInStorage} from 'services/storage';
-import {constants} from 'http2';
 import {getRequest, postRequest, registerResponseErrorMiddleware} from 'services/http';
 
 const LOGIN_ROUTE_NAME = 'Login';
@@ -35,8 +34,8 @@ export const loggedInUser: Ref<LoggedInUser | undefined> = ref(getFromStorage<Lo
 registerResponseErrorMiddleware(({response}) => {
     if (!response) return;
     const {status} = response;
-    if (status === constants.HTTP_STATUS_FORBIDDEN) goToDefaultLoggedInPage();
-    else if (status === constants.HTTP_STATUS_UNAUTHORIZED) {
+    if (status === StatusCodes.FORBIDDEN) goToDefaultLoggedInPage();
+    else if (status === StatusCodes.UNAUTHORIZED) {
         // only need to logout of the app, because on the backend the user is already logged out
         logoutOfApp();
     }

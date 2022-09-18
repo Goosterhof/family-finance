@@ -1,5 +1,5 @@
+import {StatusCodes} from 'http-status-codes';
 import {Toast} from 'types/services';
-import {constants} from 'http2';
 import {createApp, h, ref} from 'vue';
 import {registerResponseErrorMiddleware, registerResponseMiddleware} from 'services/http';
 import ToastComponent from './Toast.vue';
@@ -68,6 +68,6 @@ registerResponseErrorMiddleware(({response}) => {
     if (!response) return;
     const {data, status} = response;
     if (!data?.message) return;
-    if (status === constants.HTTP_STATUS_UNAUTHORIZED) return infoToast(data.message);
+    if (status === StatusCodes.UNAUTHORIZED) return infoToast(data.message);
     dangerToast(data.message);
 });

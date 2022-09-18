@@ -21,6 +21,7 @@ declare(strict_types = 1);
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\StatementController;
 
 $router->post('login', [AuthController::class, 'login']);
 $router->post('send-mail-reset-password', [PasswordResetsController::class, 'store']);
@@ -30,6 +31,8 @@ $router->post('register', [AuthController::class, 'register']);
 $router->group(['middleware' => ['auth:api']], function () use ($router) {
     $router->post('logout', [AuthController::class, 'logout']);
     $router->get('me', [AuthController::class, 'me']);
+    // TODO :: family middleware?
     $router->get('categories', [CategoryController::class, 'index']);
     $router->post('categories', [CategoryController::class, 'store']);
+    $router->get('statements', [StatementController::class, 'index']);
 });

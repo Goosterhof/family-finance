@@ -34,7 +34,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <RouterLink class="nav-link" :to="{name: 'statements.overview'}">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -51,7 +51,7 @@
                             <polyline points="13 2 13 9 20 9" />
                         </svg>
                         <span class="ms-3">Afschriften</span>
-                    </a>
+                    </RouterLink>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">

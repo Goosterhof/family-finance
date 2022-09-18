@@ -1,6 +1,7 @@
-import {addRoute, router} from 'services/router';
+import {addRoute, addRoutesBasedOnRouteSettings, router} from 'services/router';
 import {setAuthRoutes} from 'services/auth';
 
+import {statementRouteSettings} from 'domains/statements';
 import HomePage from 'pages/HomePage.vue';
 import LoginPage from 'pages/auth/LoginPage.vue';
 import ProfilePage from 'pages/ProfilePage.vue';
@@ -20,6 +21,8 @@ export const setupRouter = () => {
         component: ProfilePage,
         meta: {auth: true},
     });
+
+    addRoutesBasedOnRouteSettings(statementRouteSettings);
 
     setAuthRoutes(LoginPage, LoginPage, LoginPage, RegisterPage);
 

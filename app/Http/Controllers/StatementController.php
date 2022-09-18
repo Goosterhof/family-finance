@@ -6,18 +6,26 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreStatementRequest;
 use App\Http\Requests\UpdateStatementRequest;
+use App\Http\Resources\StatementResource;
 use App\Models\Statement;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class StatementController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
-        //
+        /**
+         * The authentication user
+         *
+         * @var User
+         */
+        // $user = $this->auth->user();
+        return StatementResource::collection(Statement::all());
     }
 
     /**

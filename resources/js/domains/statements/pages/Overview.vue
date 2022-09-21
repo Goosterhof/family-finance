@@ -17,8 +17,9 @@
             :key="toAccountName"
             class="card mb-2 pb-2"
         >
-            <div class="card-header">
+            <div class="card-header d-flex justify-content-between align-items-center">
                 <h6 class="card-subtitle">{{ toAccountName }}</h6>
+                <span>€{{ statements.reduce((acc, {amount}) => (acc += amount), 0) }}</span>
             </div>
             <div v-for="statement in statements" :key="statement.description" class="card ms-2 me-2 mt-2">
                 <div class="card-body">

@@ -7,7 +7,9 @@
         <div class="card-body">
             <ul class="list-group list-group-flush">
                 <AddCategory v-if="addMainCategory" :category-id="null" @done="addMainCategory = false" />
-                <CategoryList :categories="categoryStoreModule.all.value" />
+                <CategoryList
+                    :categories="categoryStoreModule.all.value.filter(({categoryId}) => categoryId === null)"
+                />
             </ul>
         </div>
     </div>

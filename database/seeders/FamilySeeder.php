@@ -17,10 +17,12 @@ class FamilySeeder extends Seeder
     {
         Family::factory()
             ->hasUsers(1, [
+                'first_name' => 'Gerard',
+                'last_name' => 'Oosterhof',
                 'password' => 'password',
                 'email' => 'user@test.com',
             ])
-            ->has(Category::factory(3)->hasCategories(2))
+            // ->has(Category::factory(3)->hasCategories(2))
             ->create();
 
         Family::factory(10)

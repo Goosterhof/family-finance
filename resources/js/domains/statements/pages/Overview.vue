@@ -64,15 +64,15 @@ watchEffect(() => {
     const allStatements = Object.values(statementsPerAccountName.value).flat();
     for (const statement of allStatements) {
         if (statement.categoryId) {
-            accountToCategory[statement.toAccount] = statement.categoryId;
+            accountToCategory[statement.toAccountName] = statement.categoryId;
             continue;
         }
-        if (accountToCategory[statement.toAccount]) {
-            statement.categoryId = accountToCategory[statement.toAccount];
+        if (accountToCategory[statement.toAccountName]) {
+            statement.categoryId = accountToCategory[statement.toAccountName];
             continue;
         }
         const speculatedCategoryId = allStatements.find(
-            ({toAccount, categoryId}) => toAccount === statement.toAccount && categoryId,
+            ({toAccountName, categoryId}) => toAccountName === statement.toAccountName && categoryId,
         )?.categoryId;
         if (!speculatedCategoryId) continue;
         statement.categoryId = speculatedCategoryId;

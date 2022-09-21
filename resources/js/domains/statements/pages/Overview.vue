@@ -31,7 +31,7 @@
                             €{{ statement.amount }}
                         </span>
                         <span class="ms-2">
-                            <select :value="statement.categoryId">
+                            <select v-model="statement.categoryId">
                                 <option disabled :value="0">Nog geen optie toegevoegd</option>
                                 <option v-for="category in categories" :key="category.id" :value="category.id">
                                     {{ category.name }}
@@ -51,12 +51,33 @@ import {New} from 'types/generics';
 import {Statement} from '../types';
 import {categoryRepository, categoryStoreModule} from 'domains/categories';
 import {parseCSV} from 'helpers/csv';
-import {ref} from 'vue';
+import {ref, watchEffect} from 'vue';
 
 const FIRST_FILE_INDEX = 0;
 
 const csvInput = ref<HTMLInputElement>();
 const statementsPerAccountName = ref<Record<string, New<Statement>[]>>({});
+
+const accountToCategory: Record<string, number> = {};
+
+watchEffect(() => {
+    const allStatements = Object.values(statementsPerAccountName.value).flat();
+    for (const statement of allStatements) {
+        if (statement.categoryId) {
+            accountToCategory[statement.toAccount] = statement.categoryId;
+            continue;
+        }
+        if (accountToCategory[statement.toAccount]) {
+            statement.categoryId = accountToCategory[statement.toAccount];
+            continue;
+        }
+        const speculatedCategoryId = allStatements.find(
+            ({toAccount, categoryId}) => toAccount === statement.toAccount && categoryId,
+        )?.categoryId;
+        if (!speculatedCategoryId) continue;
+        statement.categoryId = speculatedCategoryId;
+    }
+});
 
 categoryRepository.getAll();
 const categories = categoryStoreModule.all;

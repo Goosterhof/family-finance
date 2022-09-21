@@ -20,6 +20,10 @@ class CategorySeeder extends Seeder
                 "Belasting",
                 "Reparatie",
                 "APK/Beurt"
+            ],
+            "Zorgverzekering" => [
+                "ZV Gerard",
+                "ZV Floor"
             ]
         ];
 

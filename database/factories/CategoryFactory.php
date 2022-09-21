@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Database\Factories;
 
-use App\Models\Family;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CategoryFactory extends Factory
@@ -18,7 +17,7 @@ class CategoryFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'familyId' => $this->faker->randomElement(Family::all()),
+            // 'familyId' => $this->faker->randomElement(Family::all()),
         ];
     }
 }

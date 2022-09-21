@@ -22,12 +22,14 @@ class FamilySeeder extends Seeder
                 'password' => 'password',
                 'email' => 'user@test.com',
             ])
-            // ->has(Category::factory(3)->hasCategories(2))
             ->create();
 
         Family::factory(10)
             ->hasUsers(2)
-            ->has(Category::factory(3)->hasCategories(2))
+            ->has(Category::factory(3)
+                // TODO ::  this one doenst get the family id
+                // ->hasCategories(2)
+            )
             ->create();
     }
 }

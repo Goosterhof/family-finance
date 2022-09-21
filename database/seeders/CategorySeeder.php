@@ -17,13 +17,64 @@ class CategorySeeder extends Seeder
         $categoryStructure = [
             "Auto" => [
                 "Tanken",
-                "Belasting",
+                "Rijtuigen belasting",
                 "Reparatie",
-                "APK/Beurt"
+                "APK/Beurt",
+                "Parkeren",
+                "Autoverzekering",
+                "ANWB"
             ],
             "Zorgverzekering" => [
                 "ZV Gerard",
                 "ZV Floor"
+            ],
+            "Nutsbedrijven" => [
+                "Electriciteit",
+                "Water",
+                "Energiewacht"
+            ],
+            "Bankkosten" => [
+                "Gerard Rabobank",
+                "Gezamenlijke bank",
+                "Floor ING"
+            ],
+            "Streamingdiensten" => [
+                "HBO",
+                "Prime"
+            ],
+            "Mobiel abbonomenten" => [
+                "Mobiel Gerard",
+                "Mobiel Floor"
+            ],
+            "Hobbies" => [
+                "Gamen Gerard",
+                "Crypto",
+                "Whisky"
+            ],
+            "Boodschappen" => [],
+            "Heen en weer" => [
+                "Naar gezamenlijk"
+            ],
+            "Loon en giften" => [
+                "Loon Gerard",
+                "Gift"
+            ],
+            "Verzorging" => [
+                "Kapper"
+            ],
+            "Lidmaatschappen" => [
+                "BNN/VARA"
+            ],
+            "Overig" => [
+                "Gereedschap",
+                "Cadeau's",
+                "Vakantie",
+                "Uiteten",
+                "Eten bezorgen"
+            ],
+            "Belastingen" => [
+                "Teruggaven",
+                "Andere belastingen"
             ]
         ];
 

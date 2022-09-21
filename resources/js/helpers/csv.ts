@@ -31,7 +31,7 @@ const createEmpyStatement = (): New<Statement> => ({
     toAccount: '',
     toAccountName: '',
     description: '',
-    categoryId: NaN,
+    categoryId: 0,
 });
 
 const getNextEntryFromLine = (

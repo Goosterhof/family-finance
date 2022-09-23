@@ -1,5 +1,8 @@
 <template>
-    <h1 class="h1">Afschriften</h1>
+    <div class="d-flex justify-content-between align-items-center">
+        <h1 class="h1">Afschriften</h1>
+        <button v-if="statements.length" class="btn btn-primary" @click="saveStatements">Opslaan</button>
+    </div>
 
     <form v-if="!statements.length">
         <input ref="csvInput" type="file" accept=".csv" @input="getCSVAndParseIt" />
@@ -56,6 +59,7 @@ import {Statement} from '../types';
 import {categoryRepository, categoryStoreModule} from 'domains/categories';
 import {parseCSV} from 'helpers/csv';
 import {reactive, ref, watchEffect} from 'vue';
+import {statementRepository} from '../';
 import BasePriceTag from 'components/base/BasePriceTag.vue';
 
 const FIRST_FILE_INDEX = 0;
@@ -123,4 +127,6 @@ const getCSVAndParseIt = () => {
 
     reader.readAsText(input);
 };
+
+const saveStatements = () => statementRepository.massCreate(statements.value);
 </script>

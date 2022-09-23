@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MassStoreStatementRequest;
 use App\Http\Requests\StoreStatementRequest;
 use App\Http\Requests\UpdateStatementRequest;
 use App\Http\Resources\StatementResource;
@@ -47,6 +48,19 @@ class StatementController extends Controller
      */
     public function store(StoreStatementRequest $request)
     {
+        //
+    }
+
+    /**
+     * Store multiple newly created resources in storage.
+     *
+     * @param \App\Http\Requests\MassStoreStatementRequest $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function massStore(MassStoreStatementRequest $request)
+    {
+        Statement::insert($request->validated());
         //
     }
 

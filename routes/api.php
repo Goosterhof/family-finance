@@ -34,5 +34,7 @@ $router->group(['middleware' => ['auth:api']], function () use ($router) {
     // TODO :: family middleware?
     $router->get('categories', [CategoryController::class, 'index']);
     $router->post('categories', [CategoryController::class, 'store']);
+
     $router->get('statements', [StatementController::class, 'index']);
+    $router->post('statements/mass', [StatementController::class, 'massStore']);
 });

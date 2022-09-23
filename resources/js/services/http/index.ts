@@ -63,8 +63,9 @@ http.interceptors.response.use(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getRequest = <T = any>(endpoint: string, options?: AxiosRequestConfig) => http.get<T>(endpoint, options);
 
-export const postRequest = (endpoint: string, data: unknown, options?: AxiosRequestConfig) =>
-    http.post(endpoint, data, options);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const postRequest = <T = any>(endpoint: string, data: unknown, options?: AxiosRequestConfig) =>
+    http.post<T>(endpoint, data, options);
 
 export const deleteRequest = (endpoint: string) => http.delete(endpoint);
 

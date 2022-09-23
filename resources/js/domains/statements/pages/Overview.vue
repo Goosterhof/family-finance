@@ -20,9 +20,11 @@
             v-for="(statementsForAccountName, toAccountName, index) in statementsPerAccountName"
             :key="toAccountName"
             class="card mb-2 pb-2"
-            @click="toggleCollapsable(index)"
         >
-            <div class="card-header d-flex justify-content-between align-items-center">
+            <div
+                class="card-header d-flex justify-content-between align-items-center"
+                @click="toggleCollapsable(index)"
+            >
                 <h6 class="card-subtitle">{{ toAccountName }}</h6>
                 <BasePriceTag :price="totalPerAccountName[toAccountName]" />
             </div>

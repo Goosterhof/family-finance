@@ -20,8 +20,8 @@ class MassStoreStatementRequest extends BaseFormRequest
             'statements.*.balanceAfter' => 'required|numeric',
             'statements.*.bankId' => "required|string",
             'statements.*.categoryId' => 'required|numeric|exists:categories,id',
-            'statements.*.description' => "required|string",
-            'statements.*.toAccount' => "required|string",
+            'statements.*.description' => "nullable|string",
+            'statements.*.toAccount' => "nullable|string",
             'statements.*.toAccountName' => "required|string",
             'statements.*.transactionDate' => "required|date",
         ];

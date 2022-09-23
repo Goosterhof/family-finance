@@ -28,12 +28,12 @@ return new class extends Migration
             $table->string('account');
             $table->string('bank_id');
             $table->date('transaction_date');
-            $table->float('amount', 2);
-            $table->float('balance_after', 2);
+            $table->float('amount');
+            $table->float('balance_after');
             // TODO :: should become foreign
-            $table->string('to_account');
+            $table->string('to_account')->nullable();
             $table->string('to_account_name');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->foreignId('category_id')->constrained();
             $table->timestamps();
         });

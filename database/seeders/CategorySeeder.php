@@ -38,6 +38,9 @@ class CategorySeeder extends Seeder
                 "Gezamenlijke bank",
                 "Floor ING"
             ],
+            "Abbonementen" => [
+                "Microsoft Family"
+            ],
             "Streamingdiensten" => [
                 "HBO",
                 "Prime"
@@ -60,7 +63,9 @@ class CategorySeeder extends Seeder
                 "Gift"
             ],
             "Verzorging" => [
-                "Kapper"
+                "Kapper",
+                "Kleding",
+                "Tandarts"
             ],
             "Lidmaatschappen" => [
                 "BNN/VARA"

@@ -13,34 +13,37 @@
         </h1>
 
         <div
-            v-for="(statements, toAccountName) in statementsPerAccountName"
+            v-for="(statements, toAccountName, index) in statementsPerAccountName"
             :key="toAccountName"
             class="card mb-2 pb-2"
+            @click="toggleCollapsable(index)"
         >
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h6 class="card-subtitle">{{ toAccountName }}</h6>
                 <span>€{{ statements.reduce((acc, {amount}) => (acc += amount), 0) }}</span>
             </div>
-            <div v-for="statement in statements" :key="statement.description" class="card ms-2 me-2 mt-2">
-                <div class="card-body">
-                    <div>
-                        <span
-                            :style="{
-                                color: statement.amount < 0 ? 'red' : 'green',
-                            }"
-                        >
-                            €{{ statement.amount }}
-                        </span>
-                        <span class="ms-2">
-                            <select v-model="statement.categoryId">
-                                <option disabled :value="0">Nog geen optie toegevoegd</option>
-                                <option v-for="category in categories" :key="category.id" :value="category.id">
-                                    {{ category.name }}
-                                </option>
-                            </select>
-                        </span>
+            <div ref="collapsableElements">
+                <div v-for="statement in statements" :key="statement.description" class="card ms-2 me-2 mt-2">
+                    <div class="card-body">
+                        <div>
+                            <span
+                                :style="{
+                                    color: statement.amount < 0 ? 'red' : 'green',
+                                }"
+                            >
+                                €{{ statement.amount }}
+                            </span>
+                            <span class="ms-2">
+                                <select v-model="statement.categoryId">
+                                    <option disabled :value="0">Nog geen optie toegevoegd</option>
+                                    <option v-for="category in categories" :key="category.id" :value="category.id">
+                                        {{ category.name }}
+                                    </option>
+                                </select>
+                            </span>
+                        </div>
+                        {{ statement.description }}
                     </div>
-                    {{ statement.description }}
                 </div>
             </div>
         </div>
@@ -48,6 +51,7 @@
 </template>
 
 <script setup lang="ts">
+import {Collapse} from 'bootstrap';
 import {New} from 'types/generics';
 import {Statement} from '../types';
 import {categoryRepository, categoryStoreModule} from 'domains/categories';
@@ -55,6 +59,13 @@ import {parseCSV} from 'helpers/csv';
 import {ref, watchEffect} from 'vue';
 
 const FIRST_FILE_INDEX = 0;
+
+const collapsableElements = ref<HTMLDivElement[]>([]);
+const collapsables = ref<Collapse[]>([]);
+
+watchEffect(() => (collapsables.value = collapsableElements.value.map(el => new Collapse(el))));
+
+const toggleCollapsable = (index: number) => collapsables.value[index].toggle();
 
 const csvInput = ref<HTMLInputElement>();
 const statementsPerAccountName = ref<Record<string, New<Statement>[]>>({});
@@ -103,4 +114,9 @@ const getCSVAndParseIt = () => {
 
     reader.readAsText(input);
 };
+
+// onMounted(() => {
+//     if (!collapsable.value) return;
+//     collapsable.value.forEach(el => new Collapse(el));
+// });
 </script>

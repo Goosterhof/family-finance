@@ -10,7 +10,7 @@
             <h1 class="h2">
                 {{ statements[0].account }}
             </h1>
-            <span :style="getStyleForPrice(totalOveral)">€{{ totalOveral }}</span>
+            <BasePriceTag :price="totalOveral" />
         </div>
 
         <div
@@ -21,9 +21,7 @@
         >
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h6 class="card-subtitle">{{ toAccountName }}</h6>
-                <span :style="getStyleForPrice(totalPerAccountName[toAccountName])">
-                    €{{ totalPerAccountName[toAccountName] }}
-                </span>
+                <BasePriceTag :price="totalPerAccountName[toAccountName]" />
             </div>
             <div ref="collapsableElements">
                 <div
@@ -33,7 +31,7 @@
                 >
                     <div class="card-body">
                         <div>
-                            <span :style="getStyleForPrice(statement.amount)">€{{ statement.amount }}</span>
+                            <BasePriceTag :price="statement.amount" />
                             <span class="ms-2">
                                 <select v-model="statement.categoryId">
                                     <option disabled :value="0">Nog geen optie toegevoegd</option>
@@ -55,9 +53,10 @@
 import {Collapse} from 'bootstrap';
 import {New} from 'types/generics';
 import {Statement} from '../types';
-import {StyleValue, reactive, ref, watchEffect} from 'vue';
 import {categoryRepository, categoryStoreModule} from 'domains/categories';
 import {parseCSV} from 'helpers/csv';
+import {reactive, ref, watchEffect} from 'vue';
+import BasePriceTag from 'components/base/BasePriceTag.vue';
 
 const FIRST_FILE_INDEX = 0;
 const TOTAL_START_COUNT = 0;
@@ -124,8 +123,4 @@ const getCSVAndParseIt = () => {
 
     reader.readAsText(input);
 };
-
-const getStyleForPrice = (price: number): StyleValue => ({
-    color: price < TOTAL_START_COUNT ? 'red' : 'green',
-});
 </script>

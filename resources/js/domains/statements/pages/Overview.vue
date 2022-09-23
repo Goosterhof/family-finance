@@ -55,7 +55,7 @@
 import {Collapse} from 'bootstrap';
 import {New} from 'types/generics';
 import {Statement} from '../types';
-import {StyleValue, computed, reactive, ref, watchEffect} from 'vue';
+import {StyleValue, reactive, ref, watchEffect} from 'vue';
 import {categoryRepository, categoryStoreModule} from 'domains/categories';
 import {parseCSV} from 'helpers/csv';
 
@@ -74,7 +74,7 @@ const statements = ref<New<Statement>[]>([]);
 const statementsPerAccountName = reactive<Record<string, New<Statement>[]>>({});
 const totalPerAccountName = reactive<Record<string, number>>({});
 
-const totalOveral = computed(() => statements.value.reduce((total, {amount}) => total + amount, TOTAL_START_COUNT));
+const totalOveral = ref(TOTAL_START_COUNT);
 
 const accountToCategory: Record<string, number> = {};
 
@@ -118,6 +118,7 @@ const getCSVAndParseIt = () => {
             }
             statementsPerAccountName[statement.toAccountName].push(statement);
             totalPerAccountName[statement.toAccountName] += statement.amount;
+            totalOveral.value += statement.amount;
         }
     };
 

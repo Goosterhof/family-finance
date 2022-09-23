@@ -20,6 +20,14 @@ class StatementResource extends JsonResource
         return [
             'id' => $this->id,
             'account' => $this->account,
+            'amount' => $this->amount,
+            'balanceAfter' => $this->balanceAfter,
+            'bankId' => $this->bankId,
+            'categoryId' => $this->categoryId,
+            'description' => $this->description,
+            'toAccount' => $this->toAccount,
+            'toAccountName' => $this->toAccountName,
+            'transactionDate' => $this->transactionDate,
         ];
     }
 }

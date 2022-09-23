@@ -33,18 +33,18 @@
                     v-for="statement in statementsForAccountName"
                     :key="statement.description"
                     class="card ms-2 me-2 mt-2"
+                    :style="{backgroundColor: 'rgba(222,2,2,0.1)'}"
                 >
                     <div class="card-body">
                         <div>
                             <BasePriceTag :price="statement.amount" />
-                            <span class="ms-2">
-                                <select v-model="statement.categoryId">
-                                    <option disabled :value="0">Nog geen optie toegevoegd</option>
-                                    <option v-for="category in categories" :key="category.id" :value="category.id">
-                                        {{ category.name }}
-                                    </option>
-                                </select>
-                            </span>
+                            <select v-model="statement.categoryId" class="ms-2">
+                                <option disabled :value="0">Nog geen optie toegevoegd</option>
+                                <option v-for="category in categories" :key="category.id" :value="category.id">
+                                    {{ category.name }}
+                                </option>
+                            </select>
+                            <span v-if="knownStatements[statement.bankId]" class="ms-2 bold">Afschrift al bekend</span>
                         </div>
                         {{ statement.description }}
                     </div>
@@ -61,7 +61,8 @@ import {Statement} from '../types';
 import {categoryRepository, categoryStoreModule} from 'domains/categories';
 import {parseCSV} from 'helpers/csv';
 import {reactive, ref, watchEffect} from 'vue';
-import {statementRepository} from '../';
+import {statementRepository, statementStoreModule} from '../';
+import {successToast} from 'services/toast';
 import BasePriceTag from 'components/base/BasePriceTag.vue';
 
 const FIRST_FILE_INDEX = 0;
@@ -78,6 +79,7 @@ const csvInput = ref<HTMLInputElement>();
 const statements = ref<New<Statement>[]>([]);
 const statementsPerAccountName = reactive<Record<string, New<Statement>[]>>({});
 const totalPerAccountName = reactive<Record<string, number>>({});
+const knownStatements = reactive<Record<string, boolean>>({});
 
 const totalOveral = ref(TOTAL_START_COUNT);
 
@@ -124,11 +126,18 @@ const getCSVAndParseIt = () => {
             statementsPerAccountName[statement.toAccountName].push(statement);
             totalPerAccountName[statement.toAccountName] += statement.amount;
             totalOveral.value += statement.amount;
+
+            knownStatements[statement.bankId] = statementStoreModule.all.value.some(
+                ({bankId}) => bankId === statement.bankId,
+            );
         }
     };
 
     reader.readAsText(input);
 };
 
-const saveStatements = () => statementRepository.massCreate(statements.value);
+const saveStatements = async () => {
+    await statementRepository.massCreate(statements.value);
+    successToast('Afschriften zijn opgeslagen');
+};
 </script>

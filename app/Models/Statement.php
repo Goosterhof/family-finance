@@ -12,14 +12,15 @@ class Statement extends BaseModel
      * @var array
      */
     protected $fillable = [
-        "account" ,
-        "amount" ,
-        "balanceAfter" ,
-        "bankId" ,
-        "categoryId" ,
-        "description" ,
-        "toAccount" ,
-        "toAccountName" ,
-        "transactionDate" ,
+        "account",
+        "amount",
+        "balanceAfter",
+        "bankId",
+        "categoryId",
+        "description",
+        "toAccount",
+        "toAccountName",
+        "transactionDate",
+        "familyId",
     ];
 }

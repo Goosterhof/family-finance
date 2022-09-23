@@ -35,6 +35,7 @@ return new class extends Migration
             $table->string('to_account_name');
             $table->string('description')->nullable();
             $table->foreignId('category_id')->constrained();
+            $table->foreignId('family_id')->constrained();
             $table->timestamps();
         });
     }

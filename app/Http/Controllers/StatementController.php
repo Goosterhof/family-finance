@@ -60,17 +60,13 @@ class StatementController extends Controller
      */
     public function massStore(MassStoreStatementRequest $request)
     {
+        $familyId = $request->validated('familyId');
+
         foreach ($request->validated('statements') as $statement) {
             // TODO :: camelcasing doesnt work with firstOr
             Statement::firstOrCreate([
-                "account" => $statement['account'],
-                "amount" => $statement['amount'],
-                "balance_after" => $statement['balanceAfter'],
                 "bank_id" => $statement['bankId'],
-                "description" => $statement['description'],
-                "to_account" => $statement['toAccount'],
-                "to_account_name" => $statement['toAccountName'],
-                "transaction_date" => $statement['transactionDate'],
+                "family_id" => $familyId,
             ], [
                 'categoryId' => $statement['categoryId'],
                 "balanceAfter" => $statement['balanceAfter'],
@@ -78,6 +74,7 @@ class StatementController extends Controller
                 "toAccount" => $statement['toAccount'],
                 "toAccountName" => $statement['toAccountName'],
                 "transactionDate" => $statement['transactionDate'],
+                "familyId" => $familyId,
             ]);
         }
     }
